@@ -1,4 +1,4 @@
-package fr.meow.simulator.core.game;
+package fr.meow.simulator.core.games;
 
 public interface GameInterface {
     String getName();
