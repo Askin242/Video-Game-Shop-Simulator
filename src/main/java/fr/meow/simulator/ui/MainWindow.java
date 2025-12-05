@@ -1,4 +1,4 @@
-package fr.meow.simulator.ui;
+package main.java.fr.meow.simulator.ui;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
