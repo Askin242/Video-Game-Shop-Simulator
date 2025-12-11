@@ -1,6 +1,9 @@
 package fr.meow.simulator.core.games;
 
+import fr.meow.simulator.utils.MathUtils;
+
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class GamesManager {
     public ArrayList<Game> gameArrayList;
@@ -16,182 +19,200 @@ public class GamesManager {
     }
 
     public Game getGameByName(String name) {
-        return gameArrayList.stream().filter(g -> g.getName().equals(name)).findFirst().orElse(null);
+        return gameArrayList.stream()
+                .filter(g -> g.getName().equals(name))
+                .findFirst()
+                .orElse(null);
     }
 
     public ArrayList<Game> getGamesByTypeAndTier(GameType type, GameTier tier) {
-        return (ArrayList<Game>) gameArrayList.stream().filter(g -> g.getGameType().equals(type) && g.getGameTier().equals(tier));
+        return gameArrayList.stream()
+                .filter(g -> g.getGameType().equals(type) && g.getGameTier().equals(tier))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public ArrayList<Game> getGamesByType(GameType type) {
-        return (ArrayList<Game>) gameArrayList.stream().filter(g -> g.getGameType().equals(type));
+        return gameArrayList.stream()
+                .filter(g -> g.getGameType().equals(type))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public ArrayList<Game> initializeFps() {
-        ArrayList<Game> gameArrayList = new ArrayList<>();
-        gameArrayList.add(new Game("Doom Eternal", 20, 20, 1, 1, GameType.FPS, GameTier.FIRST));
-        gameArrayList.add(new Game("Half-Life 2", 20, 20, 1, 1, GameType.FPS, GameTier.FIRST));
-        gameArrayList.add(new Game("Counter-Strike: Global Offensive", 20, 20, 1, 1, GameType.FPS, GameTier.FIRST));
-        gameArrayList.add(new Game("Call of Duty 4: Modern Warfare", 20, 20, 1, 1, GameType.FPS, GameTier.FIRST));
-        gameArrayList.add(new Game("Battlefield 1", 20, 20, 1, 1, GameType.FPS, GameTier.FIRST));
-        gameArrayList.add(new Game("Halo: Combat Evolved", 20, 20, 1, 1, GameType.FPS, GameTier.FIRST));
-        gameArrayList.add(new Game("Titanfall 2", 20, 20, 1, 1, GameType.FPS, GameTier.FIRST));
+        ArrayList<Game> games = new ArrayList<>();
+        games.add(buildGame("Doom Eternal", GameType.FPS, GameTier.FIRST));
+        games.add(buildGame("Half-Life 2", GameType.FPS, GameTier.FIRST));
+        games.add(buildGame("Counter-Strike: Global Offensive", GameType.FPS, GameTier.FIRST));
+        games.add(buildGame("Call of Duty 4: Modern Warfare", GameType.FPS, GameTier.FIRST));
+        games.add(buildGame("Battlefield 1", GameType.FPS, GameTier.FIRST));
+        games.add(buildGame("Halo: Combat Evolved", GameType.FPS, GameTier.FIRST));
+        games.add(buildGame("Titanfall 2", GameType.FPS, GameTier.FIRST));
 
-        gameArrayList.add(new Game("Overwatch 2", 20, 20, 1, 1, GameType.FPS, GameTier.SECOND));
-        gameArrayList.add(new Game("Rainbow Six Siege", 20, 20, 1, 1, GameType.FPS, GameTier.SECOND));
-        gameArrayList.add(new Game("Metro Exodus", 20, 20, 1, 1, GameType.FPS, GameTier.SECOND));
-        gameArrayList.add(new Game("Bioshock", 20, 20, 1, 1, GameType.FPS, GameTier.SECOND));
-        gameArrayList.add(new Game("Far Cry 3", 20, 20, 1, 1, GameType.FPS, GameTier.SECOND));
-        gameArrayList.add(new Game("Borderlands 2", 20, 20, 1, 1, GameType.FPS, GameTier.SECOND));
-        gameArrayList.add(new Game("Quake", 20, 20, 1, 1, GameType.FPS, GameTier.SECOND));
+        games.add(buildGame("Overwatch 2", GameType.FPS, GameTier.SECOND));
+        games.add(buildGame("Rainbow Six Siege", GameType.FPS, GameTier.SECOND));
+        games.add(buildGame("Metro Exodus", GameType.FPS, GameTier.SECOND));
+        games.add(buildGame("Bioshock", GameType.FPS, GameTier.SECOND));
+        games.add(buildGame("Far Cry 3", GameType.FPS, GameTier.SECOND));
+        games.add(buildGame("Borderlands 2", GameType.FPS, GameTier.SECOND));
+        games.add(buildGame("Quake", GameType.FPS, GameTier.SECOND));
 
-        gameArrayList.add(new Game("Destiny 2", 20, 20, 1, 1, GameType.FPS, GameTier.THIRD));
-        gameArrayList.add(new Game("Apex Legends", 20, 20, 1, 1, GameType.FPS, GameTier.THIRD));
-        gameArrayList.add(new Game("Crysis", 20, 20, 1, 1, GameType.FPS, GameTier.THIRD));
-        gameArrayList.add(new Game("Wolfenstein: The New Order", 20, 20, 1, 1, GameType.FPS, GameTier.THIRD));
-        gameArrayList.add(new Game("Escape from Tarkov", 20, 20, 1, 1, GameType.FPS, GameTier.THIRD));
-        gameArrayList.add(new Game("Warhammer 40K: Boltgun", 20, 20, 1, 1, GameType.FPS, GameTier.THIRD));
-        gameArrayList.add(new Game("STALKER: Shadow of Chernobyl", 20, 20, 1, 1, GameType.FPS, GameTier.THIRD));
-        return gameArrayList;
+        games.add(buildGame("Destiny 2", GameType.FPS, GameTier.THIRD));
+        games.add(buildGame("Apex Legends", GameType.FPS, GameTier.THIRD));
+        games.add(buildGame("Crysis", GameType.FPS, GameTier.THIRD));
+        games.add(buildGame("Wolfenstein: The New Order", GameType.FPS, GameTier.THIRD));
+        games.add(buildGame("Escape from Tarkov", GameType.FPS, GameTier.THIRD));
+        games.add(buildGame("Warhammer 40K: Boltgun", GameType.FPS, GameTier.THIRD));
+        games.add(buildGame("STALKER: Shadow of Chernobyl", GameType.FPS, GameTier.THIRD));
+        return games;
     }
 
     public ArrayList<Game> initializeRpg() {
-        ArrayList<Game> gameArrayList = new ArrayList<>();
-        gameArrayList.add(new Game("The Witcher 3", 20, 20, 1, 1, GameType.RPG, GameTier.FIRST));
-        gameArrayList.add(new Game("Skyrim", 20, 20, 1, 1, GameType.RPG, GameTier.FIRST));
-        gameArrayList.add(new Game("Dragon Age: Origins", 20, 20, 1, 1, GameType.RPG, GameTier.FIRST));
-        gameArrayList.add(new Game("Baldur’s Gate 3", 20, 20, 1, 1, GameType.RPG, GameTier.FIRST));
-        gameArrayList.add(new Game("Mass Effect 2", 20, 20, 1, 1, GameType.RPG, GameTier.FIRST));
-        gameArrayList.add(new Game("Fallout: New Vegas", 20, 20, 1, 1, GameType.RPG, GameTier.FIRST));
-        gameArrayList.add(new Game("Divinity: Original Sin 2", 20, 20, 1, 1, GameType.RPG, GameTier.FIRST));
+        ArrayList<Game> games = new ArrayList<>();
+        games.add(buildGame("The Witcher 3", GameType.RPG, GameTier.FIRST));
+        games.add(buildGame("Skyrim", GameType.RPG, GameTier.FIRST));
+        games.add(buildGame("Dragon Age: Origins", GameType.RPG, GameTier.FIRST));
+        games.add(buildGame("Baldur’s Gate 3", GameType.RPG, GameTier.FIRST));
+        games.add(buildGame("Mass Effect 2", GameType.RPG, GameTier.FIRST));
+        games.add(buildGame("Fallout: New Vegas", GameType.RPG, GameTier.FIRST));
+        games.add(buildGame("Divinity: Original Sin 2", GameType.RPG, GameTier.FIRST));
 
-        gameArrayList.add(new Game("Diablo II", 20, 20, 1, 1, GameType.RPG, GameTier.SECOND));
-        gameArrayList.add(new Game("Final Fantasy VII", 20, 20, 1, 1, GameType.RPG, GameTier.SECOND));
-        gameArrayList.add(new Game("Persona 5", 20, 20, 1, 1, GameType.RPG, GameTier.SECOND));
-        gameArrayList.add(new Game("Dark Souls", 20, 20, 1, 1, GameType.RPG, GameTier.SECOND));
-        gameArrayList.add(new Game("Elden Ring", 20, 20, 1, 1, GameType.RPG, GameTier.SECOND));
-        gameArrayList.add(new Game("Xenoblade Chronicles", 20, 20, 1, 1, GameType.RPG, GameTier.SECOND));
-        gameArrayList.add(new Game("Kingdom Come: Deliverance", 20, 20, 1, 1, GameType.RPG, GameTier.SECOND));
+        games.add(buildGame("Diablo II", GameType.RPG, GameTier.SECOND));
+        games.add(buildGame("Final Fantasy VII", GameType.RPG, GameTier.SECOND));
+        games.add(buildGame("Persona 5", GameType.RPG, GameTier.SECOND));
+        games.add(buildGame("Dark Souls", GameType.RPG, GameTier.SECOND));
+        games.add(buildGame("Elden Ring", GameType.RPG, GameTier.SECOND));
+        games.add(buildGame("Xenoblade Chronicles", GameType.RPG, GameTier.SECOND));
+        games.add(buildGame("Kingdom Come: Deliverance", GameType.RPG, GameTier.SECOND));
 
-        gameArrayList.add(new Game("Path of Exile", 20, 20, 1, 1, GameType.RPG, GameTier.THIRD));
-        gameArrayList.add(new Game("Star Wars: KOTOR", 20, 20, 1, 1, GameType.RPG, GameTier.THIRD));
-        gameArrayList.add(new Game("Bloodborne", 20, 20, 1, 1, GameType.RPG, GameTier.THIRD));
-        gameArrayList.add(new Game("Oblivion", 20, 20, 1, 1, GameType.RPG, GameTier.THIRD));
-        gameArrayList.add(new Game("Pokémon HeartGold", 20, 20, 1, 1, GameType.RPG, GameTier.THIRD));
-        gameArrayList.add(new Game("Tales of Arise", 20, 20, 1, 1, GameType.RPG, GameTier.THIRD));
-        gameArrayList.add(new Game("Monster Hunter: World", 20, 20, 1, 1, GameType.RPG, GameTier.THIRD));
-        return gameArrayList;
+        games.add(buildGame("Path of Exile", GameType.RPG, GameTier.THIRD));
+        games.add(buildGame("Star Wars: KOTOR", GameType.RPG, GameTier.THIRD));
+        games.add(buildGame("Bloodborne", GameType.RPG, GameTier.THIRD));
+        games.add(buildGame("Oblivion", GameType.RPG, GameTier.THIRD));
+        games.add(buildGame("Pokémon HeartGold", GameType.RPG, GameTier.THIRD));
+        games.add(buildGame("Tales of Arise", GameType.RPG, GameTier.THIRD));
+        games.add(buildGame("Monster Hunter: World", GameType.RPG, GameTier.THIRD));
+        return games;
     }
 
     public ArrayList<Game> initializeTycoon() {
-        ArrayList<Game> gameArrayList = new ArrayList<>();
-        gameArrayList.add(new Game("RollerCoaster Tycoon 2", 20, 20, 1, 1, GameType.Tycoon, GameTier.FIRST));
-        gameArrayList.add(new Game("Transport Tycoon Deluxe", 20, 20, 1, 1, GameType.Tycoon, GameTier.FIRST));
-        gameArrayList.add(new Game("Zoo Tycoon", 20, 20, 1, 1, GameType.Tycoon, GameTier.FIRST));
-        gameArrayList.add(new Game("Planet Coaster", 20, 20, 1, 1, GameType.Tycoon, GameTier.FIRST));
-        gameArrayList.add(new Game("Game Dev Tycoon", 20, 20, 1, 1, GameType.Tycoon, GameTier.FIRST));
-        gameArrayList.add(new Game("Capitalism II", 20, 20, 1, 1, GameType.Tycoon, GameTier.FIRST));
-        gameArrayList.add(new Game("Tropico 5", 20, 20, 1, 1, GameType.Tycoon, GameTier.FIRST));
+        ArrayList<Game> games = new ArrayList<>();
+        games.add(buildGame("RollerCoaster Tycoon 2", GameType.Tycoon, GameTier.FIRST));
+        games.add(buildGame("Transport Tycoon Deluxe", GameType.Tycoon, GameTier.FIRST));
+        games.add(buildGame("Zoo Tycoon", GameType.Tycoon, GameTier.FIRST));
+        games.add(buildGame("Planet Coaster", GameType.Tycoon, GameTier.FIRST));
+        games.add(buildGame("Game Dev Tycoon", GameType.Tycoon, GameTier.FIRST));
+        games.add(buildGame("Capitalism II", GameType.Tycoon, GameTier.FIRST));
+        games.add(buildGame("Tropico 5", GameType.Tycoon, GameTier.FIRST));
 
-        gameArrayList.add(new Game("Cities: Skylines", 20, 20, 1, 1, GameType.Tycoon, GameTier.SECOND));
-        gameArrayList.add(new Game("Prison Architect", 20, 20, 1, 1, GameType.Tycoon, GameTier.SECOND));
-        gameArrayList.add(new Game("Railroad Tycoon 3", 20, 20, 1, 1, GameType.Tycoon, GameTier.SECOND));
-        gameArrayList.add(new Game("Industry Giant II", 20, 20, 1, 1, GameType.Tycoon, GameTier.SECOND));
-        gameArrayList.add(new Game("Anno 1404", 20, 20, 1, 1, GameType.Tycoon, GameTier.SECOND));
-        gameArrayList.add(new Game("Planet Zoo", 20, 20, 1, 1, GameType.Tycoon, GameTier.SECOND));
-        gameArrayList.add(new Game("SimCity 4", 20, 20, 1, 1, GameType.Tycoon, GameTier.SECOND));
+        games.add(buildGame("Cities: Skylines", GameType.Tycoon, GameTier.SECOND));
+        games.add(buildGame("Prison Architect", GameType.Tycoon, GameTier.SECOND));
+        games.add(buildGame("Railroad Tycoon 3", GameType.Tycoon, GameTier.SECOND));
+        games.add(buildGame("Industry Giant II", GameType.Tycoon, GameTier.SECOND));
+        games.add(buildGame("Anno 1404", GameType.Tycoon, GameTier.SECOND));
+        games.add(buildGame("Planet Zoo", GameType.Tycoon, GameTier.SECOND));
+        games.add(buildGame("SimCity 4", GameType.Tycoon, GameTier.SECOND));
 
-        gameArrayList.add(new Game("Factorio", 20, 20, 1, 1, GameType.Tycoon, GameTier.THIRD));
-        gameArrayList.add(new Game("Mashinky", 20, 20, 1, 1, GameType.Tycoon, GameTier.THIRD));
-        gameArrayList.add(new Game("Airline Tycoon", 20, 20, 1, 1, GameType.Tycoon, GameTier.THIRD));
-        gameArrayList.add(new Game("Port Royale 3", 20, 20, 1, 1, GameType.Tycoon, GameTier.THIRD));
-        gameArrayList.add(new Game("Project Highrise", 20, 20, 1, 1, GameType.Tycoon, GameTier.THIRD));
-        gameArrayList.add(new Game("Two Point Hospital", 20, 20, 1, 1, GameType.Tycoon, GameTier.THIRD));
-        gameArrayList.add(new Game("Constructor HD", 20, 20, 1, 1, GameType.Tycoon, GameTier.THIRD));
-        return gameArrayList;
+        games.add(buildGame("Factorio", GameType.Tycoon, GameTier.THIRD));
+        games.add(buildGame("Mashinky", GameType.Tycoon, GameTier.THIRD));
+        games.add(buildGame("Airline Tycoon", GameType.Tycoon, GameTier.THIRD));
+        games.add(buildGame("Port Royale 3", GameType.Tycoon, GameTier.THIRD));
+        games.add(buildGame("Project Highrise", GameType.Tycoon, GameTier.THIRD));
+        games.add(buildGame("Two Point Hospital", GameType.Tycoon, GameTier.THIRD));
+        games.add(buildGame("Constructor HD", GameType.Tycoon, GameTier.THIRD));
+        return games;
     }
 
     public ArrayList<Game> initializeSimulator() {
-        ArrayList<Game> gameArrayList = new ArrayList<>();
-        gameArrayList.add(new Game("Microsoft Flight Simulator", 20, 20, 1, 1, GameType.Simulator, GameTier.FIRST));
-        gameArrayList.add(new Game("Farming Simulator 22", 20, 20, 1, 1, GameType.Simulator, GameTier.FIRST));
-        gameArrayList.add(new Game("Euro Truck Simulator 2", 20, 20, 1, 1, GameType.Simulator, GameTier.FIRST));
-        gameArrayList.add(new Game("American Truck Simulator", 20, 20, 1, 1, GameType.Simulator, GameTier.FIRST));
-        gameArrayList.add(new Game("The Sims 4", 20, 20, 1, 1, GameType.Simulator, GameTier.FIRST));
-        gameArrayList.add(new Game("Arma 3", 20, 20, 1, 1, GameType.Simulator, GameTier.FIRST));
-        gameArrayList.add(new Game("BeamNG.drive", 20, 20, 1, 1, GameType.Simulator, GameTier.FIRST));
+        ArrayList<Game> games = new ArrayList<>();
+        games.add(buildGame("Microsoft Flight Simulator", GameType.Simulator, GameTier.FIRST));
+        games.add(buildGame("Farming Simulator 22", GameType.Simulator, GameTier.FIRST));
+        games.add(buildGame("Euro Truck Simulator 2", GameType.Simulator, GameTier.FIRST));
+        games.add(buildGame("American Truck Simulator", GameType.Simulator, GameTier.FIRST));
+        games.add(buildGame("The Sims 4", GameType.Simulator, GameTier.FIRST));
+        games.add(buildGame("Arma 3", GameType.Simulator, GameTier.FIRST));
+        games.add(buildGame("BeamNG.drive", GameType.Simulator, GameTier.FIRST));
 
-        gameArrayList.add(new Game("Kerbal Space Program", 20, 20, 1, 1, GameType.Simulator, GameTier.SECOND));
-        gameArrayList.add(new Game("PowerWash Simulator", 20, 20, 1, 1, GameType.Simulator, GameTier.SECOND));
-        gameArrayList.add(new Game("Train Simulator Classic", 20, 20, 1, 1, GameType.Simulator, GameTier.SECOND));
-        gameArrayList.add(new Game("IL-2 Sturmovik", 20, 20, 1, 1, GameType.Simulator, GameTier.SECOND));
-        gameArrayList.add(new Game("Bus Simulator 21", 20, 20, 1, 1, GameType.Simulator, GameTier.SECOND));
-        gameArrayList.add(new Game("PC Building Simulator", 20, 20, 1, 1, GameType.Simulator, GameTier.SECOND));
-        gameArrayList.add(new Game("House Flipper", 20, 20, 1, 1, GameType.Simulator, GameTier.SECOND));
+        games.add(buildGame("Kerbal Space Program", GameType.Simulator, GameTier.SECOND));
+        games.add(buildGame("PowerWash Simulator", GameType.Simulator, GameTier.SECOND));
+        games.add(buildGame("Train Simulator Classic", GameType.Simulator, GameTier.SECOND));
+        games.add(buildGame("IL-2 Sturmovik", GameType.Simulator, GameTier.SECOND));
+        games.add(buildGame("Bus Simulator 21", GameType.Simulator, GameTier.SECOND));
+        games.add(buildGame("PC Building Simulator", GameType.Simulator, GameTier.SECOND));
+        games.add(buildGame("House Flipper", GameType.Simulator, GameTier.SECOND));
 
-        gameArrayList.add(new Game("Car Mechanic Simulator 2021", 20, 20, 1, 1, GameType.Simulator, GameTier.THIRD));
-        gameArrayList.add(new Game("Football Manager 2024", 20, 20, 1, 1, GameType.Simulator, GameTier.THIRD));
-        gameArrayList.add(new Game("Surgeon Simulator", 20, 20, 1, 1, GameType.Simulator, GameTier.THIRD));
-        gameArrayList.add(new Game("Cities in Motion 2", 20, 20, 1, 1, GameType.Simulator, GameTier.THIRD));
-        gameArrayList.add(new Game("SnowRunner", 20, 20, 1, 1, GameType.Simulator, GameTier.THIRD));
-        gameArrayList.add(new Game("World of Warships", 20, 20, 1, 1, GameType.Simulator, GameTier.THIRD));
-        gameArrayList.add(new Game("Airport CEO", 20, 20, 1, 1, GameType.Simulator, GameTier.THIRD));
-        return gameArrayList;
+        games.add(buildGame("Car Mechanic Simulator 2021", GameType.Simulator, GameTier.THIRD));
+        games.add(buildGame("Football Manager 2024", GameType.Simulator, GameTier.THIRD));
+        games.add(buildGame("Surgeon Simulator", GameType.Simulator, GameTier.THIRD));
+        games.add(buildGame("Cities in Motion 2", GameType.Simulator, GameTier.THIRD));
+        games.add(buildGame("SnowRunner", GameType.Simulator, GameTier.THIRD));
+        games.add(buildGame("World of Warships", GameType.Simulator, GameTier.THIRD));
+        games.add(buildGame("Airport CEO", GameType.Simulator, GameTier.THIRD));
+        return games;
     }
 
     public ArrayList<Game> initializeRetro() {
-        ArrayList<Game> gameArrayList = new ArrayList<>();
-        gameArrayList.add(new Game("Super Mario Bros.", 20, 20, 1, 1, GameType.Retro, GameTier.FIRST));
-        gameArrayList.add(new Game("Sonic the Hedgehog 2", 20, 20, 1, 1, GameType.Retro, GameTier.FIRST));
-        gameArrayList.add(new Game("Pac-Man", 20, 20, 1, 1, GameType.Retro, GameTier.FIRST));
-        gameArrayList.add(new Game("Tetris", 20, 20, 1, 1, GameType.Retro, GameTier.FIRST));
-        gameArrayList.add(new Game("Doom (1993)", 20, 20, 1, 1, GameType.Retro, GameTier.FIRST));
-        gameArrayList.add(new Game("Chrono Trigger", 20, 20, 1, 1, GameType.Retro, GameTier.FIRST));
-        gameArrayList.add(new Game("Street Fighter II", 20, 20, 1, 1, GameType.Retro, GameTier.FIRST));
+        ArrayList<Game> games = new ArrayList<>();
+        games.add(buildGame("Super Mario Bros.", GameType.Retro, GameTier.FIRST));
+        games.add(buildGame("Sonic the Hedgehog 2", GameType.Retro, GameTier.FIRST));
+        games.add(buildGame("Pac-Man", GameType.Retro, GameTier.FIRST));
+        games.add(buildGame("Tetris", GameType.Retro, GameTier.FIRST));
+        games.add(buildGame("Doom (1993)", GameType.Retro, GameTier.FIRST));
+        games.add(buildGame("Chrono Trigger", GameType.Retro, GameTier.FIRST));
+        games.add(buildGame("Street Fighter II", GameType.Retro, GameTier.FIRST));
 
-        gameArrayList.add(new Game("Castlevania: Symphony of the Night", 20, 20, 1, 1, GameType.Retro, GameTier.SECOND));
-        gameArrayList.add(new Game("Mega Man 2", 20, 20, 1, 1, GameType.Retro, GameTier.SECOND));
-        gameArrayList.add(new Game("The Legend of Zelda: A Link to the Past", 20, 20, 1, 1, GameType.Retro, GameTier.SECOND));
-        gameArrayList.add(new Game("Donkey Kong Country", 20, 20, 1, 1, GameType.Retro, GameTier.SECOND));
-        gameArrayList.add(new Game("Secret of Mana", 20, 20, 1, 1, GameType.Retro, GameTier.SECOND));
-        gameArrayList.add(new Game("EarthBound", 20, 20, 1, 1, GameType.Retro, GameTier.SECOND));
-        gameArrayList.add(new Game("Metroid", 20, 20, 1, 1, GameType.Retro, GameTier.SECOND));
+        games.add(buildGame("Castlevania: Symphony of the Night", GameType.Retro, GameTier.SECOND));
+        games.add(buildGame("Mega Man 2", GameType.Retro, GameTier.SECOND));
+        games.add(buildGame("The Legend of Zelda: A Link to the Past", GameType.Retro, GameTier.SECOND));
+        games.add(buildGame("Donkey Kong Country", GameType.Retro, GameTier.SECOND));
+        games.add(buildGame("Secret of Mana", GameType.Retro, GameTier.SECOND));
+        games.add(buildGame("EarthBound", GameType.Retro, GameTier.SECOND));
+        games.add(buildGame("Metroid", GameType.Retro, GameTier.SECOND));
 
-        gameArrayList.add(new Game("GoldenEye 007", 20, 20, 1, 1, GameType.Retro, GameTier.THIRD));
-        gameArrayList.add(new Game("Ultima VII", 20, 20, 1, 1, GameType.Retro, GameTier.THIRD));
-        gameArrayList.add(new Game("Prince of Persia", 20, 20, 1, 1, GameType.Retro, GameTier.THIRD));
-        gameArrayList.add(new Game("Final Fantasy VI", 20, 20, 1, 1, GameType.Retro, GameTier.THIRD));
-        gameArrayList.add(new Game("Dragon Quest III", 20, 20, 1, 1, GameType.Retro, GameTier.THIRD));
-        gameArrayList.add(new Game("Space Invaders", 20, 20, 1, 1, GameType.Retro, GameTier.THIRD));
-        gameArrayList.add(new Game("Mortal Kombat II", 20, 20, 1, 1, GameType.Retro, GameTier.THIRD));
-        return gameArrayList;
+        games.add(buildGame("GoldenEye 007", GameType.Retro, GameTier.THIRD));
+        games.add(buildGame("Ultima VII", GameType.Retro, GameTier.THIRD));
+        games.add(buildGame("Prince of Persia", GameType.Retro, GameTier.THIRD));
+        games.add(buildGame("Final Fantasy VI", GameType.Retro, GameTier.THIRD));
+        games.add(buildGame("Dragon Quest III", GameType.Retro, GameTier.THIRD));
+        games.add(buildGame("Space Invaders", GameType.Retro, GameTier.THIRD));
+        games.add(buildGame("Mortal Kombat II", GameType.Retro, GameTier.THIRD));
+        return games;
     }
 
     public ArrayList<Game> initializeSandbox() {
-        ArrayList<Game> gameArrayList = new ArrayList<>();
-        gameArrayList.add(new Game("Minecraft", 20, 20, 1, 1, GameType.Sandbox, GameTier.FIRST));
-        gameArrayList.add(new Game("Terraria", 20, 20, 1, 1, GameType.Sandbox, GameTier.FIRST));
-        gameArrayList.add(new Game("Garry's Mod", 20, 20, 1, 1, GameType.Sandbox, GameTier.FIRST));
-        gameArrayList.add(new Game("Roblox", 20, 20, 1, 1, GameType.Sandbox, GameTier.FIRST));
-        gameArrayList.add(new Game("Factorio", 20, 20, 1, 1, GameType.Sandbox, GameTier.FIRST));
-        gameArrayList.add(new Game("Space Engineers", 20, 20, 1, 1, GameType.Sandbox, GameTier.FIRST));
-        gameArrayList.add(new Game("Kerbal Space Program", 20, 20, 1, 1, GameType.Sandbox, GameTier.FIRST));
+        ArrayList<Game> games = new ArrayList<>();
+        games.add(buildGame("Minecraft", GameType.Sandbox, GameTier.FIRST));
+        games.add(buildGame("Terraria", GameType.Sandbox, GameTier.FIRST));
+        games.add(buildGame("Garry's Mod", GameType.Sandbox, GameTier.FIRST));
+        games.add(buildGame("Roblox", GameType.Sandbox, GameTier.FIRST));
+        games.add(buildGame("Factorio", GameType.Sandbox, GameTier.FIRST));
+        games.add(buildGame("Space Engineers", GameType.Sandbox, GameTier.FIRST));
+        games.add(buildGame("Kerbal Space Program", GameType.Sandbox, GameTier.FIRST));
 
-        gameArrayList.add(new Game("Scrap Mechanic", 20, 20, 1, 1, GameType.Sandbox, GameTier.SECOND));
-        gameArrayList.add(new Game("Satisfactory", 20, 20, 1, 1, GameType.Sandbox, GameTier.SECOND));
-        gameArrayList.add(new Game("Valheim", 20, 20, 1, 1, GameType.Sandbox, GameTier.SECOND));
-        gameArrayList.add(new Game("Ark: Survival Evolved", 20, 20, 1, 1, GameType.Sandbox, GameTier.SECOND));
-        gameArrayList.add(new Game("Conan Exiles", 20, 20, 1, 1, GameType.Sandbox, GameTier.SECOND));
-        gameArrayList.add(new Game("7 Days to Die", 20, 20, 1, 1, GameType.Sandbox, GameTier.SECOND));
-        gameArrayList.add(new Game("Astroneer", 20, 20, 1, 1, GameType.Sandbox, GameTier.SECOND));
+        games.add(buildGame("Scrap Mechanic", GameType.Sandbox, GameTier.SECOND));
+        games.add(buildGame("Satisfactory", GameType.Sandbox, GameTier.SECOND));
+        games.add(buildGame("Valheim", GameType.Sandbox, GameTier.SECOND));
+        games.add(buildGame("Ark: Survival Evolved", GameType.Sandbox, GameTier.SECOND));
+        games.add(buildGame("Conan Exiles", GameType.Sandbox, GameTier.SECOND));
+        games.add(buildGame("7 Days to Die", GameType.Sandbox, GameTier.SECOND));
+        games.add(buildGame("Astroneer", GameType.Sandbox, GameTier.SECOND));
 
-        gameArrayList.add(new Game("The Forest", 20, 20, 1, 1, GameType.Sandbox, GameTier.THIRD));
-        gameArrayList.add(new Game("Eco", 20, 20, 1, 1, GameType.Sandbox, GameTier.THIRD));
-        gameArrayList.add(new Game("Teardown", 20, 20, 1, 1, GameType.Sandbox, GameTier.THIRD));
-        gameArrayList.add(new Game("Project Zomboid", 20, 20, 1, 1, GameType.Sandbox, GameTier.THIRD));
-        gameArrayList.add(new Game("Besiege", 20, 20, 1, 1, GameType.Sandbox, GameTier.THIRD));
-        gameArrayList.add(new Game("Subnautica", 20, 20, 1, 1, GameType.Sandbox, GameTier.THIRD));
-        gameArrayList.add(new Game("No Man's Sky", 20, 20, 1, 1, GameType.Sandbox, GameTier.THIRD));
-        return gameArrayList;
+        games.add(buildGame("The Forest", GameType.Sandbox, GameTier.THIRD));
+        games.add(buildGame("Eco", GameType.Sandbox, GameTier.THIRD));
+        games.add(buildGame("Teardown", GameType.Sandbox, GameTier.THIRD));
+        games.add(buildGame("Project Zomboid", GameType.Sandbox, GameTier.THIRD));
+        games.add(buildGame("Besiege", GameType.Sandbox, GameTier.THIRD));
+        games.add(buildGame("Subnautica", GameType.Sandbox, GameTier.THIRD));
+        games.add(buildGame("No Man's Sky", GameType.Sandbox, GameTier.THIRD));
+        return games;
+    }
+
+    private Game buildGame(String name, GameType type, GameTier tier) {
+        double priceMultiplier = tier.getPriceMultiplier() + MathUtils.jitter(tier.getRandomRange());
+        double marketPrice = MathUtils.roundTwoDecimals(type.getBaseMarketPrice() * priceMultiplier);
+        double sellingPrice = MathUtils.roundTwoDecimals(type.getBaseSellingPrice() * priceMultiplier);
+
+        int marketWeight = Math.max(1, type.getBaseMarketWeight() + tier.getMarketWeightDelta() + MathUtils.randomInt(-1, 1));
+        int volatility = Math.max(1, type.getBaseVolatility() + tier.getVolatilityDelta() + MathUtils.randomInt(-1, 1));
+
+        return new Game(name, marketPrice, sellingPrice, marketWeight, volatility, type, tier);
     }
 }
