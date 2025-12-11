@@ -25,7 +25,11 @@ public class MainWindow {
         stage.setTitle("Video Game Shop Simulator");
 
         BorderPane root = new BorderPane();
-        root.setStyle("-fx-background-color: #1e1e1e;");
+        root.setStyle("-fx-background-image: url('/images/Background.png');"
+                + "-fx-background-size: cover;"
+                + "-fx-background-repeat: no-repeat;"
+                + "-fx-background-position: center;");
+
 
         Label titleLabel = new Label("Game Shop Simulator");
         titleLabel.setTextFill(Color.web("#ffffff"));
@@ -39,7 +43,7 @@ public class MainWindow {
         centerBox.setPadding(new Insets(50));
 
         Label welcomeLabel = new Label("Welcome to your shop!");
-        welcomeLabel.setTextFill(Color.web("#cccccc"));
+        welcomeLabel.setTextFill(Color.web("#ffffff"));
         welcomeLabel.setFont(Font.font("Segoe UI", 16));
 
         Button startButton = createStyledButton("Open Shop");
@@ -51,7 +55,7 @@ public class MainWindow {
         centerBox.getChildren().addAll(welcomeLabel, startButton, settingsButton, exitButton);
         root.setCenter(centerBox);
 
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 1200, 600);
         stage.setScene(scene);
     }
 
