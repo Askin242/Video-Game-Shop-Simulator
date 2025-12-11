@@ -14,7 +14,7 @@ public class VideoGameSimulator {
         return player;
     }
 
-    public static synchronized VideoGameSimulator getInstance( ) {
+    public static synchronized VideoGameSimulator getInstance() {
         if (simulator == null)
             simulator = new VideoGameSimulator();
         return simulator;
