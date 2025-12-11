@@ -1,6 +1,6 @@
 package fr.meow.simulator;
 
-import main.java.fr.meow.simulator.ui.MainWindow;
+import fr.meow.simulator.ui.MainWindow;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
