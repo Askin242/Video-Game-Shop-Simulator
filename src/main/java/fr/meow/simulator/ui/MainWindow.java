@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 public class MainWindow {
 
     private final Stage stage;
+    private Scene mainScene;
 
     public MainWindow(Stage stage) {
         this.stage = stage;
@@ -55,8 +56,8 @@ public class MainWindow {
         centerBox.getChildren().addAll(welcomeLabel, startButton, settingsButton, exitButton);
         root.setCenter(centerBox);
 
-        Scene scene = new Scene(root, 1200, 600);
-        stage.setScene(scene);
+        mainScene = new Scene(root, 1200, 600);
+        stage.setScene(mainScene);
     }
 
     private Button createStyledButton(String text) {
@@ -77,6 +78,8 @@ public class MainWindow {
     }
 
     public void show() {
+        stage.setScene(mainScene);
+        stage.setTitle("Video Game Shop Simulator");
         stage.show();
     }
 }

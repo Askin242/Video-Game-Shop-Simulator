@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 public class Player extends SimulatorObject {
     private double wallet;
-    private ArrayList<Game> currentGames;
-    private ArrayList<Game> sellingGames;
+    private final ArrayList<Game> currentGames;
+    private final ArrayList<Game> sellingGames;
 
     public Player(double wallet) {
         super("Player");

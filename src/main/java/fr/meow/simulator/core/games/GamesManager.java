@@ -41,9 +41,6 @@ public class GamesManager {
         for (Game game : getGamesByTypeAndTier(type, tier)) {
             game.setUnlocked(true);
         }
-        for (Game game : getGamesByTypeAndTier(type, tier)) {
-            IO.println(game.isUnlocked());
-        }
     }
 
     public ArrayList<Game> initializeFps() {
