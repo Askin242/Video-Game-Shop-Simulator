@@ -1,40 +1,25 @@
 package fr.meow.simulator.core.entity.employee;
 
-public class Employee {
-    private String color;
-    private String name;
-    private String type;
+import fr.meow.simulator.core.SimulatorObject;
+
+public class Employee extends SimulatorObject {
+
+    private final String color;
+    private final String type;
+
+    public Employee(String color, String name, String type) {
+        super(name);
+        this.color = color;
+        this.type = type;
+    }
 
     public String getColor() {
         return color;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public String getType() {
         return type;
     }
 
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    Employee(String color, String name, String type) {
-        this.color = color;
-        this.name = name;
-        this.type = type;
-    }
-
     public void DoTask() {}
-
 }
