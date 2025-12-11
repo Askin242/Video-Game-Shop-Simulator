@@ -23,6 +23,10 @@ public class GamesManager {
         return (ArrayList<Game>) gameArrayList.stream().filter(g -> g.getGameType().equals(type) && g.getGameTier().equals(tier));
     }
 
+    public ArrayList<Game> getGamesByType(GameType type) {
+        return (ArrayList<Game>) gameArrayList.stream().filter(g -> g.getGameType().equals(type));
+    }
+
     public ArrayList<Game> initializeFps() {
         ArrayList<Game> gameArrayList = new ArrayList<>();
         gameArrayList.add(new Game("Doom Eternal", 20, 20, 1, 1, GameType.FPS, GameTier.FIRST));
@@ -145,11 +149,9 @@ public class GamesManager {
         gameArrayList.add(new Game("Chrono Trigger", 20, 20, 1, 1, GameType.Retro, GameTier.FIRST));
         gameArrayList.add(new Game("Street Fighter II", 20, 20, 1, 1, GameType.Retro, GameTier.FIRST));
 
-        gameArrayList
-                .add(new Game("Castlevania: Symphony of the Night", 20, 20, 1, 1, GameType.Retro, GameTier.SECOND));
+        gameArrayList.add(new Game("Castlevania: Symphony of the Night", 20, 20, 1, 1, GameType.Retro, GameTier.SECOND));
         gameArrayList.add(new Game("Mega Man 2", 20, 20, 1, 1, GameType.Retro, GameTier.SECOND));
-        gameArrayList.add(
-                new Game("The Legend of Zelda: A Link to the Past", 20, 20, 1, 1, GameType.Retro, GameTier.SECOND));
+        gameArrayList.add(new Game("The Legend of Zelda: A Link to the Past", 20, 20, 1, 1, GameType.Retro, GameTier.SECOND));
         gameArrayList.add(new Game("Donkey Kong Country", 20, 20, 1, 1, GameType.Retro, GameTier.SECOND));
         gameArrayList.add(new Game("Secret of Mana", 20, 20, 1, 1, GameType.Retro, GameTier.SECOND));
         gameArrayList.add(new Game("EarthBound", 20, 20, 1, 1, GameType.Retro, GameTier.SECOND));
