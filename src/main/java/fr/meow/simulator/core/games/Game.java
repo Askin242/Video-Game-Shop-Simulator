@@ -1,6 +1,7 @@
 package fr.meow.simulator.core.games;
 
 import fr.meow.simulator.core.SimulatorObject;
+import fr.meow.simulator.utils.MathUtils;
 
 public class Game extends SimulatorObject implements GameInterface{
     private static final double MIN_MARKET_PRICE = 0.01;
@@ -32,17 +33,10 @@ public class Game extends SimulatorObject implements GameInterface{
 
             // Noise scaled by marketWeight. Use a light Gaussian (Box-Muller) to avoid huge jumps.
             double sigma = Math.max(0.25d, this.marketWeight * 0.05d);
-            double noise = sigma * gaussian();
+            double noise = sigma * MathUtils.gaussian();
 
             this.marketPrice = Math.max(MIN_MARKET_PRICE, this.marketPrice + meanReversion + noise);
         }
-    }
-
-    private double gaussian() {
-        // Box-Muller transform to approximate N(0,1).
-        double u1 = Math.random();
-        double u2 = Math.random();
-        return Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
     }
 
     public double getMarketPrice() {
