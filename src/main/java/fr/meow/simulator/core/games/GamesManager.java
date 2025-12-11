@@ -37,6 +37,15 @@ public class GamesManager {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
+    public void unlockGameTier(GameType type, GameTier tier) {
+        for (Game game : getGamesByTypeAndTier(type, tier)) {
+            game.setUnlocked(true);
+        }
+        for (Game game : getGamesByTypeAndTier(type, tier)) {
+            IO.println(game.isUnlocked());
+        }
+    }
+
     public ArrayList<Game> initializeFps() {
         ArrayList<Game> games = new ArrayList<>();
         games.add(buildGame("Doom Eternal", GameType.FPS, GameTier.FIRST));

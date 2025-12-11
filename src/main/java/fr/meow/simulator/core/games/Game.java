@@ -13,6 +13,7 @@ public class Game extends SimulatorObject implements GameInterface{
     private final int marketWeight;
     private double marketPrice;
     private double sellingPrice;
+    private boolean unlocked = false;
 
     public Game(String name, double marketPrice, double sellingPrice, int marketWeight, int volatility, GameType gameType, GameTier gameTier) {
         super(name);
@@ -69,5 +70,13 @@ public class Game extends SimulatorObject implements GameInterface{
 
     public void setSellingPrice(double sellingPrice) {
         this.sellingPrice = sellingPrice;
+    }
+
+    public boolean isUnlocked() {
+        return unlocked;
+    }
+
+    public void setUnlocked(boolean unlocked) {
+        this.unlocked = unlocked;
     }
 }
