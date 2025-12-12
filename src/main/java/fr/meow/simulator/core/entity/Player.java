@@ -22,6 +22,10 @@ public class Player extends SimulatorObject {
         return this.wallet;
     }
 
+    public void setWallet(double wallet) {
+        this.wallet = wallet;
+    }
+
     public void addToWallet(double amount) {
         this.wallet += wallet;
     }
