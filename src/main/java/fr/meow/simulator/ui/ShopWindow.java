@@ -38,7 +38,6 @@ public class ShopWindow {
 
     private final Stage stage;
     private final MainWindow mainWindow;
-    private final GamesManager gamesManager;
     private TableView<Game> gamesTable;
     private ObservableList<Game> gameItems;
     private Label walletLabel;
@@ -51,7 +50,6 @@ public class ShopWindow {
     public ShopWindow(Stage stage, MainWindow mainWindow) {
         this.stage = stage;
         this.mainWindow = mainWindow;
-        this.gamesManager = new GamesManager();
     }
 
     public void show() {
@@ -236,7 +234,7 @@ public class ShopWindow {
                     }
                     VideoGameSimulator.getInstance().getPlayer().removeToWallet(cost);
                     walletLabel.setText(walletText());
-                    gamesManager.unlockGameTier(type, tier);
+                    VideoGameSimulator.getInstance().getGamesManager().unlockGameTier(type, tier);
                     refreshGamesTable();
                     updateTotals();
                     updateTierButtonStates();
@@ -317,7 +315,7 @@ public class ShopWindow {
 
     private ObservableList<Game> unlockedGames() {
         return FXCollections.observableArrayList(
-                gamesManager.gameArrayList.stream()
+                VideoGameSimulator.getInstance().getGamesManager().gameArrayList.stream()
                         .filter(Game::isUnlocked)
                         .collect(Collectors.toList())
         );
@@ -328,7 +326,7 @@ public class ShopWindow {
     }
 
     private boolean isTierUnlocked(GameType type, GameTier tier) {
-        return gamesManager.getGamesByTypeAndTier(type, tier).stream()
+        return VideoGameSimulator.getInstance().getGamesManager().getGamesByTypeAndTier(type, tier).stream()
                 .anyMatch(Game::isUnlocked);
     }
 
