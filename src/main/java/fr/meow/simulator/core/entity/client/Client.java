@@ -11,6 +11,9 @@ public class Client extends SimulatorObject {
     private final ArrayList<Game> basket;
     private ArrayList<Game> lookingFor;
 
+    private int xPos;
+    private int yPos;
+
     public Client(String color, String name) {
         super(name);
         this.color = color;
@@ -43,5 +46,21 @@ public class Client extends SimulatorObject {
 
     public void addBasket(Game object) {
         this.basket.add(object);
+    }
+
+    public int getyPos() {
+        return yPos;
+    }
+
+    public void setyPos(int yPos) {
+        this.yPos = yPos;
+    }
+
+    public int getxPos() {
+        return xPos;
+    }
+
+    public void setxPos(int xPos) {
+        this.xPos = xPos;
     }
 }
