@@ -1,0 +1,14 @@
+.button.menu-button {
+    -fx-pref-width: 200;
+    -fx-pref-height: 40;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+    -fx-background-color: #3d3d3d;
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
+}
+
+.button.menu-button:hover {
+    -fx-background-color: #505050;
+}

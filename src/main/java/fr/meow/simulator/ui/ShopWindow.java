@@ -8,19 +8,13 @@ import fr.meow.simulator.core.games.GamesManager;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -38,6 +32,10 @@ public class ShopWindow {
 
     private final Stage stage;
     private final MainWindow mainWindow;
+
+    @FXML
+    private BorderPane root;
+
     private TableView<Game> gamesTable;
     private ObservableList<Game> gameItems;
     private Label walletLabel;
@@ -53,13 +51,27 @@ public class ShopWindow {
     }
 
     public void show() {
-        stage.setScene(buildScene());
-        stage.setTitle("Shop - Video Game Shop Simulator");
-        stage.show();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/meow/simulator/ui/shop_window.fxml"));
+            loader.setController(this);
+            Parent rootNode = loader.load();
+
+            Scene scene = new Scene(rootNode, 1200, 650);
+            scene.getStylesheets().add(getClass().getResource("/css/shop.css").toExternalForm());
+
+            stage.setScene(scene);
+            stage.setTitle("Shop - Video Game Shop Simulator");
+            stage.show();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load shop_window.fxml", e);
+        }
     }
 
-    private Scene buildScene() {
-        BorderPane root = new BorderPane();
+    @FXML
+    private void initialize() {
+        if (root == null) {
+            return;
+        }
         root.setPadding(new Insets(15));
         root.setStyle("-fx-background-color: #1a1a1a;");
 
@@ -99,9 +111,7 @@ public class ShopWindow {
         );
         root.setCenter(tabPane);
 
-        Scene scene = new Scene(root, 1200, 650);
-        scene.getStylesheets().add(getClass().getResource("/css/shop.css").toExternalForm());
-        return scene;
+        updateTotals();
     }
 
     private Tab buildEmployeesTab() {

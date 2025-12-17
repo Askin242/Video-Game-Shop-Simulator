@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="600.0" prefWidth="1200.0" style="-fx-background-image: url('/images/Background.png'); -fx-background-size: cover; -fx-background-repeat: no-repeat; -fx-background-position: center;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+
+    <top>
+        <Label fx:id="titleLabel" style="-fx-text-fill: white; -fx-font-family: 'Segoe UI'; -fx-font-size: 24; -fx-font-weight: bold;" text="Game Shop Simulator" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20" />
+            </padding>
+        </Label>
+    </top>
+
+    <center>
+        <VBox fx:id="centerBox" alignment="CENTER" spacing="20" stylesheets="@../../../../css/main.css">
+            <padding>
+                <Insets bottom="50" left="50" right="50" top="50" />
+            </padding>
+            <children>
+                <Label fx:id="welcomeLabel" style="-fx-text-fill: white; -fx-font-family: 'Segoe UI'; -fx-font-size: 16;" text="Welcome to your shop!" />
+
+                <Button fx:id="startButton" styleClass="menu-button" text="Open Shop" />
+                <Button fx:id="settingsButton" styleClass="menu-button" text="Settings" />
+                <Button fx:id="exitButton" styleClass="menu-button" text="Exit" />
+            </children>
+        </VBox>
+    </center>
+</BorderPane>

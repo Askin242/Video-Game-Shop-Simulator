@@ -1,21 +1,35 @@
 package fr.meow.simulator.ui;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class MainWindow {
 
     private final Stage stage;
     private Scene mainScene;
+
+    @FXML
+    private Label titleLabel;
+
+    @FXML
+    private Label welcomeLabel;
+
+    @FXML
+    private Button startButton;
+
+    @FXML
+    private Button settingsButton;
+
+    @FXML
+    private Button exitButton;
 
     public MainWindow(Stage stage) {
         this.stage = stage;
@@ -23,58 +37,26 @@ public class MainWindow {
     }
 
     private void initUI() {
-        stage.setTitle("Video Game Shop Simulator");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/meow/simulator/ui/main_window.fxml"));
+            loader.setController(this);
+            Parent root = loader.load();
 
-        BorderPane root = new BorderPane();
-        root.setStyle("-fx-background-image: url('/images/Background.png');"
-                + "-fx-background-size: cover;"
-                + "-fx-background-repeat: no-repeat;"
-                + "-fx-background-position: center;");
-
-
-        Label titleLabel = new Label("Game Shop Simulator");
-        titleLabel.setTextFill(Color.web("#ffffff"));
-        titleLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 24));
-        titleLabel.setPadding(new Insets(20));
-        BorderPane.setAlignment(titleLabel, Pos.CENTER);
-        root.setTop(titleLabel);
-
-        VBox centerBox = new VBox(20);
-        centerBox.setAlignment(Pos.CENTER);
-        centerBox.setPadding(new Insets(50));
-
-        Label welcomeLabel = new Label("Welcome to your shop!");
-        welcomeLabel.setTextFill(Color.web("#ffffff"));
-        welcomeLabel.setFont(Font.font("Segoe UI", 16));
-
-        Button startButton = createStyledButton("Open Shop");
-        Button settingsButton = createStyledButton("Settings");
-        Button exitButton = createStyledButton("Exit");
-
-        exitButton.setOnAction(e -> stage.close());
-
-        centerBox.getChildren().addAll(welcomeLabel, startButton, settingsButton, exitButton);
-        root.setCenter(centerBox);
-
-        mainScene = new Scene(root, 1200, 600);
-        stage.setScene(mainScene);
+            mainScene = new Scene(root, 1200, 600);
+            stage.setScene(mainScene);
+            stage.setTitle("Video Game Shop Simulator");
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load main_window.fxml", e);
+        }
     }
 
-    private Button createStyledButton(String text) {
-        Button button = new Button(text);
-        button.setPrefWidth(200);
-        button.setPrefHeight(40);
-        button.setFont(Font.font("Segoe UI", FontWeight.SEMI_BOLD, 14));
-        
-        String normalStyle = "-fx-background-color: #3d3d3d; -fx-text-fill: white; -fx-background-radius: 5;";
-        String hoverStyle = "-fx-background-color: #505050; -fx-text-fill: white; -fx-background-radius: 5;";
-        
-        button.setStyle(normalStyle);
-        
-        button.setOnMouseEntered(e -> button.setStyle(hoverStyle));
-        button.setOnMouseExited(e -> button.setStyle(normalStyle));
-        
-        return button;
+    @FXML
+    private void initialize() {
+        setupButtons();
+    }
+
+    private void setupButtons() {
+        exitButton.setOnAction(e -> stage.close());
     }
 
     public void show() {
