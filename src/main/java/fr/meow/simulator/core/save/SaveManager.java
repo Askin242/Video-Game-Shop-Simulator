@@ -17,7 +17,7 @@ import java.util.List;
 public class SaveManager {
     private static final String SAVE_DIRECTORY = "saves";
 
-    public boolean saveGame(VideoGameSimulator simulator, String filename) {
+    public boolean saveGame(VideoGameSimulator simulator, String filename, List<ClientSaveData> clients) {
         try {
             Path saveDir = Paths.get(SAVE_DIRECTORY);
             if (!Files.exists(saveDir)) {
@@ -28,7 +28,7 @@ public class SaveManager {
                 filename += ".dat";
             }
 
-            Save save = new Save(simulator.getPlayer(), simulator.getGamesManager());
+            Save save = new Save(simulator.getPlayer(), simulator.getGamesManager(), clients);
 
             Path savePath = saveDir.resolve(filename);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(
@@ -44,7 +44,7 @@ public class SaveManager {
         }
     }
 
-    public boolean loadGame(VideoGameSimulator simulator, String filename) {
+    public Save loadGame(VideoGameSimulator simulator, String filename) {
         try {
             if (!filename.endsWith(".dat")) {
                 filename += ".dat";
@@ -54,7 +54,7 @@ public class SaveManager {
 
             if (!Files.exists(savePath)) {
                 System.err.println("Save file not found: " + savePath);
-                return false;
+                return null;
             }
 
             Save save;
@@ -66,11 +66,11 @@ public class SaveManager {
 
             restoreGameState(simulator, save);
 
-            return true;
+            return save;
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("Error loading game: " + e.getMessage());
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 

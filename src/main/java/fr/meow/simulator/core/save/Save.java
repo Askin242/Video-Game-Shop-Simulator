@@ -19,8 +19,9 @@ public class Save implements Serializable {
 
     private final List<GameSaveData> gameStates;
     private final List<UnlockedTier> unlockedTiers;
+    private final List<ClientSaveData> clients;
 
-    public Save(Player player, GamesManager gamesManager) {
+    public Save(Player player, GamesManager gamesManager, List<ClientSaveData> clients) {
         this.playerWallet = player.getWallet();
         this.playerCurrentGameNames = new ArrayList<>();
         this.playerSellingGameNames = new ArrayList<>();
@@ -57,6 +58,8 @@ public class Save implements Serializable {
                 }
             }
         }
+
+        this.clients = clients != null ? new ArrayList<>(clients) : new ArrayList<>();
     }
 
     public Save() {
@@ -64,6 +67,7 @@ public class Save implements Serializable {
         this.playerSellingGameNames = new ArrayList<>();
         this.gameStates = new ArrayList<>();
         this.unlockedTiers = new ArrayList<>();
+        this.clients = new ArrayList<>();
     }
 
     public double getPlayerWallet() {
@@ -84,5 +88,9 @@ public class Save implements Serializable {
 
     public List<UnlockedTier> getUnlockedTiers() {
         return unlockedTiers;
+    }
+
+    public List<ClientSaveData> getClients() {
+        return clients;
     }
 }

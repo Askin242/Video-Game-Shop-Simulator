@@ -22,8 +22,13 @@ public class VideoGameSimulator {
     }
 
     public static synchronized VideoGameSimulator getInstance() {
-        if (simulator == null)
+        if (simulator == null) {
             simulator = new VideoGameSimulator();
+        }
         return simulator;
+    }
+
+    public static synchronized void reset() {
+        simulator = new VideoGameSimulator();
     }
 }

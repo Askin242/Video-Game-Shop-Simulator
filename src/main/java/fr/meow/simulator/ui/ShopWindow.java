@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 public class ShopWindow {
 
     private final Stage stage;
-    private final MainWindow mainWindow;
+    private final Runnable onBack;
 
     @FXML
     private BorderPane root;
@@ -45,9 +45,9 @@ public class ShopWindow {
     private final Map<Game, Integer> quantities = new HashMap<>();
     private final Map<String, Button> tierUnlockButtons = new HashMap<>();
 
-    public ShopWindow(Stage stage, MainWindow mainWindow) {
+    public ShopWindow(Stage stage, Runnable onBack) {
         this.stage = stage;
-        this.mainWindow = mainWindow;
+        this.onBack = onBack;
     }
 
     public void show() {
@@ -86,7 +86,11 @@ public class ShopWindow {
         Button backButton = new Button("← Go Back");
         backButton.setStyle("-fx-background-color: #3d3d3d; -fx-text-fill: white; -fx-background-radius: 5;");
         backButton.setFont(Font.font("Segoe UI", FontWeight.SEMI_BOLD, 13));
-        backButton.setOnAction(e -> mainWindow.show());
+        backButton.setOnAction(e -> {
+            if (onBack != null) {
+                onBack.run();
+            }
+        });
         backButton.setOnMouseEntered(e -> backButton.setStyle("-fx-background-color: #505050; -fx-text-fill: white; -fx-background-radius: 5;"));
         backButton.setOnMouseExited(e -> backButton.setStyle("-fx-background-color: #3d3d3d; -fx-text-fill: white; -fx-background-radius: 5;"));
 

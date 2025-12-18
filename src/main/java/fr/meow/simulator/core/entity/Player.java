@@ -27,11 +27,11 @@ public class Player extends SimulatorObject {
     }
 
     public void addToWallet(double amount) {
-        this.wallet += wallet;
+        this.wallet += amount;
     }
 
     public void removeToWallet(double amount) {
-        this.wallet -= wallet;
+        this.wallet -= amount;
     }
 
     public ArrayList<Game> getCurrentGames() {
