@@ -1,6 +1,8 @@
 package fr.meow.simulator.core.games;
 
+import fr.meow.simulator.core.Clock;
 import fr.meow.simulator.core.SimulatorObject;
+import fr.meow.simulator.core.VideoGameSimulator;
 import fr.meow.simulator.utils.MathUtils;
 
 public class Game extends SimulatorObject implements GameInterface{
@@ -38,6 +40,19 @@ public class Game extends SimulatorObject implements GameInterface{
 
             this.marketPrice = Math.max(MIN_MARKET_PRICE, this.marketPrice + meanReversion + noise);
         }
+    }
+
+    public void ClockLoop() {
+        new Thread(() -> {
+            try {
+                while (true) {
+                    Clock.tick();
+                    Thread.sleep(1000);
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }).start();
     }
 
     public double getMarketPrice() {

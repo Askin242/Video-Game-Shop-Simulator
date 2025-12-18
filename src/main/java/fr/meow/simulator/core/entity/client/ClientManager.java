@@ -12,7 +12,7 @@ public class ClientManager {
     public ClientManager() {
     }
 
-    public void spawnClients() {
+    public void spawnClient() {
         Colors randomColor = Colors.values()[random.nextInt(Colors.values().length)];
         Client client = new Client(randomColor.name(), "Client");
         addClient(client);

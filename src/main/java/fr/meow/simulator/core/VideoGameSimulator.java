@@ -14,6 +14,7 @@ public class VideoGameSimulator {
         this.player = new Player(1000);
         this.gamesManager = new GamesManager();
         this.clientManager = new ClientManager();
+        Clock.tick();
     }
 
     public Player getPlayer() {

@@ -37,6 +37,12 @@ public class GamesManager {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
+    public ArrayList<Game> getUnlockedGames() {
+        return gameArrayList.stream()
+                .filter(Game::isUnlocked)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
     public void unlockGameTier(GameType type, GameTier tier) {
         for (Game game : getGamesByTypeAndTier(type, tier)) {
             game.setUnlocked(true);
