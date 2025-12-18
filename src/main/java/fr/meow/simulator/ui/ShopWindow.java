@@ -1,6 +1,8 @@
 package fr.meow.simulator.ui;
 
 import fr.meow.simulator.core.Magasin;
+import fr.meow.simulator.core.entity.employee.Buyer;
+import fr.meow.simulator.core.entity.employee.Employee;
 import fr.meow.simulator.core.games.Game;
 import fr.meow.simulator.core.games.GameTier;
 import fr.meow.simulator.core.games.GameType;
@@ -11,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -105,8 +108,15 @@ public class ShopWindow {
         root.setTop(topBar);
 
         TabPane tabPane = new TabPane();
-        tabPane.getTabs().addAll(buildEmployeesTab(), buildGamesTab(), buildTiersTab());
+        Tab employeesTab = buildEmployeesTab();
+        tabPane.getTabs().addAll(employeesTab, buildGamesTab(), buildTiersTab());
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        
+        employeesTab.setOnSelectionChanged(e -> {
+            if (employeesTab.isSelected() && employeesTab.getContent() instanceof VBox) {
+                refreshEmployeeTab((VBox) employeesTab.getContent());
+            }
+        });
         tabPane.setStyle(
             "-fx-background-color: #1a1a1a;" +
             "-fx-border-color: #2d2d2d;" +
@@ -118,15 +128,115 @@ public class ShopWindow {
     }
 
     private Tab buildEmployeesTab() {
-        VBox box = new VBox(10);
-        box.setAlignment(Pos.CENTER);
+        VBox box = new VBox(15);
+        box.setAlignment(Pos.TOP_LEFT);
         box.setPadding(new Insets(20));
         box.setStyle("-fx-background-color: #1a1a1a;");
 
-        Label placeholder = new Label("Hiring employees coming soon.");
-        placeholder.setFont(Font.font("Segoe UI", 16));
-        placeholder.setTextFill(Color.web("#bbbbbb"));
-        box.getChildren().add(placeholder);
+        Label title = new Label("Employees");
+        title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 18));
+        title.setTextFill(Color.web("#f5f5f5"));
+
+        TableView<Employee> employeeTable = new TableView<>();
+        ObservableList<Employee> employeeItems = FXCollections.observableArrayList(
+                Magasin.getInstance().getEmployeeManager().getEmployees()
+        );
+        employeeTable.setItems(employeeItems);
+        employeeTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        employeeTable.setStyle("-fx-base: #1a1a1a; -fx-control-inner-background: #1a1a1a; -fx-text-inner-color: #f5f5f5;");
+        employeeTable.setPrefHeight(300);
+
+        TableColumn<Employee, String> nameCol = new TableColumn<>("Name");
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        TableColumn<Employee, String> typeCol = new TableColumn<>("Type");
+        typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+
+        TableColumn<Employee, String> wageCol = new TableColumn<>("Daily Wage");
+        wageCol.setCellValueFactory(cellData -> {
+            Employee emp = cellData.getValue();
+            if (emp instanceof Buyer) {
+                Buyer buyer = (Buyer) emp;
+                return new SimpleStringProperty(String.format("$%.2f", buyer.getDailyWage()));
+            }
+            return new SimpleStringProperty("-");
+        });
+
+        TableColumn<Employee, Void> actionsCol = new TableColumn<>("Actions");
+        actionsCol.setCellFactory(column -> new TableCell<>() {
+            private final Button fireButton = new Button("Fire");
+
+            {
+                fireButton.setStyle("-fx-background-color: #d32f2f; -fx-text-fill: white; -fx-background-radius: 3;");
+                fireButton.setOnAction(e -> {
+                    Employee emp = getTableView().getItems().get(getIndex());
+                    Magasin.getInstance().getEmployeeManager().removeEmployee(emp);
+                    employeeItems.setAll(Magasin.getInstance().getEmployeeManager().getEmployees());
+                    employeeTable.refresh();
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(fireButton);
+                }
+            }
+        });
+
+        employeeTable.getColumns().addAll(nameCol, typeCol, wageCol, actionsCol);
+
+        VBox hireSection = new VBox(10);
+        hireSection.setStyle("-fx-background-color: #2a2a2a; -fx-padding: 15; -fx-background-radius: 5;");
+
+        Label hireTitle = new Label("Hire Employee");
+        hireTitle.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
+        hireTitle.setTextFill(Color.web("#f5f5f5"));
+
+        Button hireBuyerButton = new Button("Hire Buyer");
+        double buyerWage = Buyer.calculateWage();
+        Label buyerWageLabel = new Label(String.format("Daily Wage: $%.2f", buyerWage));
+        buyerWageLabel.setFont(Font.font("Segoe UI", 12));
+        buyerWageLabel.setTextFill(Color.web("#90caf9"));
+
+        Label buyerDesc = new Label("Buys missing games automatically when out of stock");
+        buyerDesc.setFont(Font.font("Segoe UI", 11));
+        buyerDesc.setTextFill(Color.web("#bbbbbb"));
+        buyerDesc.setWrapText(true);
+
+        hireBuyerButton.setStyle("-fx-background-color: #2d2d2d; -fx-text-fill: white; -fx-background-radius: 4; -fx-padding: 8 20;");
+        hireBuyerButton.setFont(Font.font("Segoe UI", FontWeight.SEMI_BOLD, 13));
+        hireBuyerButton.setOnMouseEntered(e -> hireBuyerButton.setStyle("-fx-background-color: #3a3a3a; -fx-text-fill: white; -fx-background-radius: 4; -fx-padding: 8 20;"));
+        hireBuyerButton.setOnMouseExited(e -> hireBuyerButton.setStyle("-fx-background-color: #2d2d2d; -fx-text-fill: white; -fx-background-radius: 4; -fx-padding: 8 20;"));
+
+        boolean hasBuyer = employeeItems.stream().anyMatch(emp -> emp instanceof Buyer);
+        if (hasBuyer) {
+            hireBuyerButton.setDisable(true);
+            hireBuyerButton.setText("Buyer Already Hired");
+        }
+
+        hireBuyerButton.setOnAction(e -> {
+            boolean currentHasBuyer = Magasin.getInstance().getEmployeeManager().getEmployees().stream()
+                    .anyMatch(emp -> emp instanceof Buyer);
+            if (!currentHasBuyer) {
+                Buyer buyer = new Buyer("blue", "Buyer", "Buyer");
+                Magasin.getInstance().getEmployeeManager().addEmployee(buyer);
+                employeeItems.setAll(Magasin.getInstance().getEmployeeManager().getEmployees());
+                employeeTable.refresh();
+                hireBuyerButton.setDisable(true);
+                hireBuyerButton.setText("Buyer Already Hired");
+                buyerWageLabel.setText(String.format("Daily Wage: $%.2f", Buyer.calculateWage()));
+            }
+        });
+
+        VBox buyerInfo = new VBox(5, buyerWageLabel, buyerDesc);
+        VBox buyerSection = new VBox(8, hireBuyerButton, buyerInfo);
+        hireSection.getChildren().addAll(hireTitle, buyerSection);
+
+        box.getChildren().addAll(title, employeeTable, hireSection);
 
         Tab tab = new Tab("Employees");
         tab.setContent(box);
@@ -353,6 +463,43 @@ public class ShopWindow {
                     boolean isUnlocked = isTierUnlocked(type, tier);
                     boolean canAfford = Magasin.getInstance().getPlayer().getWallet() >= cost;
                     button.setDisable(isUnlocked || !canAfford);
+                }
+            }
+        }
+    }
+
+    private void refreshEmployeeTab(VBox content) {
+        for (Node node : content.getChildren()) {
+            if (node instanceof TableView) {
+                TableView<Employee> table = (TableView<Employee>) node;
+                ObservableList<Employee> items = FXCollections.observableArrayList(
+                        Magasin.getInstance().getEmployeeManager().getEmployees()
+                );
+                table.setItems(items);
+                table.refresh();
+                
+                boolean hasBuyer = items.stream().anyMatch(emp -> emp instanceof Buyer);
+                updateHireButtonState(content, hasBuyer);
+                break;
+            }
+        }
+    }
+
+    private void updateHireButtonState(VBox content, boolean hasBuyer) {
+        for (Node node : content.getChildren()) {
+            if (node instanceof VBox) {
+                VBox vbox = (VBox) node;
+                for (Node child : vbox.getChildren()) {
+                    if (child instanceof Button) {
+                        Button btn = (Button) child;
+                        if (btn.getText().contains("Hire Buyer") || btn.getText().contains("Buyer Already")) {
+                            btn.setDisable(hasBuyer);
+                            btn.setText(hasBuyer ? "Buyer Already Hired" : "Hire Buyer");
+                        }
+                    }
+                    if (child instanceof VBox) {
+                        updateHireButtonState((VBox) child, hasBuyer);
+                    }
                 }
             }
         }

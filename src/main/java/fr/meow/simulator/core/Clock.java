@@ -1,5 +1,8 @@
 package fr.meow.simulator.core;
 
+import fr.meow.simulator.core.entity.employee.Buyer;
+import fr.meow.simulator.core.entity.employee.Employee;
+
 import java.util.Random;
 
 public class Clock {
@@ -29,6 +32,11 @@ public class Clock {
     public static void tick() {
         advanceTime();
         handleClientSpawning();
+        handleEmployeeTasks();
+    }
+    
+    private static void handleEmployeeTasks() {
+        Magasin.getInstance().getEmployeeManager().update();
     }
 
     private static void advanceTime() {
@@ -39,10 +47,20 @@ public class Clock {
             hours++;
         }
 
-        if (hours >= 24) {
+        if (hours >= 22) {
             hours = 10;
 
-            Magasin.getInstance().getPlayer().newGameDay();
+            Magasin magasin = Magasin.getInstance();
+            magasin.getPlayer().newGameDay();
+            magasin.getEmployeeManager().newGameDay();
+            
+            for (Employee emp : magasin.getEmployeeManager().getEmployees()) {
+                if (emp instanceof Buyer) {
+                    Buyer buyer = (Buyer) emp;
+                    double wage = buyer.getDailyWage();
+                    magasin.getPlayer().removeToWallet(wage);
+                }
+            }
         }
     }
 

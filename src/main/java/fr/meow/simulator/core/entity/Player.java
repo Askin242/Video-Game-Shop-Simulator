@@ -54,4 +54,28 @@ public class Player extends SimulatorObject {
     public void removeFromSelling(Game game) {
         this.sellingGames.remove(game);
     }
+
+    public int countGameInInventory(Game game) {
+        int count = 0;
+        for (Game g : currentGames) {
+            if (g.getName().equals(game.getName())) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int countGameOnShelf(Game game) {
+        int count = 0;
+        for (Game g : sellingGames) {
+            if (g.getName().equals(game.getName())) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int countTotalGame(Game game) {
+        return countGameInInventory(game) + countGameOnShelf(game);
+    }
 }

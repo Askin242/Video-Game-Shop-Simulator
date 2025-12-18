@@ -220,11 +220,10 @@ public class GamesManager {
     private Game buildGame(String name, GameType type, GameTier tier) {
         double priceMultiplier = tier.getPriceMultiplier() + MathUtils.jitter(tier.getRandomRange());
         double marketPrice = MathUtils.roundTwoDecimals(type.getBaseMarketPrice() * priceMultiplier);
-        double sellingPrice = MathUtils.roundTwoDecimals(type.getBaseSellingPrice() * priceMultiplier);
 
         int marketWeight = Math.max(1, type.getBaseMarketWeight() + tier.getMarketWeightDelta() + MathUtils.randomInt(-1, 1));
         int volatility = Math.max(1, type.getBaseVolatility() + tier.getVolatilityDelta() + MathUtils.randomInt(-1, 1));
 
-        return new Game(name, marketPrice, sellingPrice, marketWeight, volatility, type, tier);
+        return new Game(name, marketPrice, marketPrice, marketWeight, volatility, type, tier);
     }
 }
