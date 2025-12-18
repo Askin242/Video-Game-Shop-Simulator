@@ -4,7 +4,6 @@ import fr.meow.simulator.core.SimulatorObject;
 import fr.meow.simulator.core.VideoGameSimulator;
 import fr.meow.simulator.core.entity.Player;
 import fr.meow.simulator.core.games.Game;
-import fr.meow.simulator.core.games.GameType;
 import fr.meow.simulator.core.games.GamesManager;
 import fr.meow.simulator.utils.MathUtils;
 
@@ -68,15 +67,17 @@ public class Client extends SimulatorObject {
         ArrayList<Game> selling = player.getSellingGames();
 
         for (Game desired : new ArrayList<>(lookingFor)) {
-            GameType type = desired.getGameType();
-
             if (!selling.contains(desired)) {
-                System.out.println("No " + desired.getName() + " available.");
+                if (VideoGameSimulator.getInstance().getNotificationListener() != null) {
+                    VideoGameSimulator.getInstance().getNotificationListener().notify("No " + desired.getName() + " available.");
+                }
                 continue;
             }
 
             if (!canBuy(desired)) {
-                System.out.println(desired.getName() + " too expensive.");
+                if (VideoGameSimulator.getInstance().getNotificationListener() != null) {
+                    VideoGameSimulator.getInstance().getNotificationListener().notify(desired.getName() + " too expensive.");
+                }
                 continue;
             }
 
@@ -90,7 +91,9 @@ public class Client extends SimulatorObject {
                 player.removeFromSelling(desired);
                 player.addToWallet(desired.getSellingPrice());
                 basket.add(desired);
-                System.out.println(getName() + " bought " + desired.getName());
+                if (VideoGameSimulator.getInstance().getNotificationListener() != null) {
+                    VideoGameSimulator.getInstance().getNotificationListener().notify(getName() + " bought " + desired.getName());
+                }
             }
         }
     }

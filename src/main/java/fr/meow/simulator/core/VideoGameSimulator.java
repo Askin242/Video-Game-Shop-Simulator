@@ -10,6 +10,7 @@ public class VideoGameSimulator {
     private final GamesManager gamesManager;
     private final ClientManager clientManager;
     private final Clock clock;
+    private NotificationListener notificationListener;
 
     public VideoGameSimulator() {
         this.player = new Player(1000);
@@ -29,6 +30,14 @@ public class VideoGameSimulator {
 
     public ClientManager getClientManager() {
         return clientManager;
+    }
+
+    public void setNotificationListener(NotificationListener listener) {
+        this.notificationListener = listener;
+    }
+
+    public NotificationListener getNotificationListener() {
+        return notificationListener;
     }
 
     public static synchronized VideoGameSimulator getInstance() {

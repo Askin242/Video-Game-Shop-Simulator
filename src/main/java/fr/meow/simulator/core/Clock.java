@@ -5,7 +5,6 @@ import java.util.Random;
 
 public class Clock {
 
-    private static int day = 1;
     private static int hours = 9;
     private static int minutes = 0;
     
@@ -43,7 +42,6 @@ public class Clock {
 
         if (hours >= 24) {
             hours = 9;
-            day++;
 
             VideoGameSimulator.getInstance().getPlayer().newGameDay();
         }
@@ -66,11 +64,11 @@ public class Clock {
     private static double getRandomizedSpawnRateForHour(int hour) {
         double base;
 
-        if (hour >= 10 && hour < 12) {
+        if (hour >= 10 && hour <= 12) {
             base = 2.0;
-        } else if (hour >= 13 && hour < 17) {
+        } else if (hour >= 13 && hour <= 17) {
             base = 4.0;
-        } else if (hour >= 18 && hour < 22) {
+        } else if (hour >= 18 && hour <= 22) {
             base = 1.0;
         } else {
             return 0.0;
@@ -80,11 +78,7 @@ public class Clock {
         return base * variation;
     }
 
-    public int getDay() {
-        return day;
-    }
-
-    public String getTime() {
+    public static String getFormattedTime() {
         return String.format("%02d:%02d", hours, minutes);
     }
 }

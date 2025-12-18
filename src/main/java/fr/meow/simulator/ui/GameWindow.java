@@ -1,5 +1,7 @@
 package fr.meow.simulator.ui;
 
+import fr.meow.simulator.core.Clock;
+import fr.meow.simulator.core.NotificationListener;
 import fr.meow.simulator.core.VideoGameSimulator;
 import fr.meow.simulator.core.entity.Player;
 import fr.meow.simulator.core.entity.client.Client;
@@ -9,6 +11,8 @@ import fr.meow.simulator.core.entity.client.Colors;
 import fr.meow.simulator.core.save.ClientSaveData;
 import fr.meow.simulator.core.save.Point2DSaveData;
 import javafx.animation.AnimationTimer;
+import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -21,11 +25,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -33,7 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GameWindow implements ClientListener {
+public class GameWindow implements ClientListener, NotificationListener {
 
     private final Stage stage;
     private final MainWindow mainWindow;
@@ -46,6 +52,8 @@ public class GameWindow implements ClientListener {
 
     private AnimationTimer animationTimer;
     private Label walletLabel;
+    private Label clockLabel;
+    private VBox notificationBox;
 
     private String walletText() {
         return String.format("Wallet: $%.2f", VideoGameSimulator.getInstance().getPlayer().getWallet());
@@ -58,6 +66,7 @@ public class GameWindow implements ClientListener {
         initUI();
         initAnimation();
         VideoGameSimulator.getInstance().getClientManager().addListener(this);
+        VideoGameSimulator.getInstance().setNotificationListener(this);
     }
 
     public void show() {
@@ -82,6 +91,29 @@ public class GameWindow implements ClientListener {
         if (sprite != null && clientLayer != null) {
             clientLayer.getChildren().remove(sprite.view);
         }
+    }
+
+    @Override
+    public void notify(String message) {
+        Platform.runLater(() -> {
+            if (notificationBox == null) {
+                return;
+            }
+            Label notification = new Label(message);
+            notification.setTextFill(Color.web("#ffffff"));
+            notification.setStyle("-fx-background-color: rgba(0, 0, 0, 0.7); -fx-padding: 4 15 4 15; -fx-background-radius: 6;");
+            notification.setFont(Font.font("Segoe UI", 14));
+
+            notificationBox.getChildren().add(0, notification);
+
+            PauseTransition delay = new PauseTransition(Duration.seconds(3));
+            delay.setOnFinished(e -> notificationBox.getChildren().remove(notification));
+            delay.play();
+
+            if (notificationBox.getChildren().size() > 5) {
+                notificationBox.getChildren().remove(notificationBox.getChildren().size() - 1);
+            }
+        });
     }
 
     public void handleClientSpawn(Client client) {
@@ -119,6 +151,22 @@ public class GameWindow implements ClientListener {
                         .subtract(20));
         walletLabel.setLayoutY(15);
         root.getChildren().add(walletLabel);
+
+        clockLabel = new Label(Clock.getFormattedTime());
+        clockLabel.setFont(Font.font("Segoe UI", 25));
+        clockLabel.setTextFill(Color.web("#ffffff"));
+        clockLabel.setLayoutX(20);
+        clockLabel.setLayoutY(15);
+        root.getChildren().add(clockLabel);
+
+        notificationBox = new VBox(5);
+        notificationBox.setFillWidth(false);
+        notificationBox.setAlignment(Pos.TOP_RIGHT);
+        notificationBox.layoutXProperty().bind(
+                root.widthProperty()
+                        .subtract(320));
+        notificationBox.setLayoutY(55);
+        root.getChildren().add(notificationBox);
 
         Rectangle bookshelfOutline = new Rectangle(235, 15, 890, 325);
         bookshelfOutline.setFill(Color.TRANSPARENT);
@@ -267,6 +315,9 @@ public class GameWindow implements ClientListener {
 
         if (walletLabel != null) {
             walletLabel.setText(walletText());
+        }
+        if (clockLabel != null) {
+            clockLabel.setText(Clock.getFormattedTime());
         }
     }
 
