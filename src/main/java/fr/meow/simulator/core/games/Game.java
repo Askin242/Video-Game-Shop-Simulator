@@ -1,8 +1,6 @@
 package fr.meow.simulator.core.games;
 
-import fr.meow.simulator.core.Clock;
 import fr.meow.simulator.core.SimulatorObject;
-import fr.meow.simulator.core.VideoGameSimulator;
 import fr.meow.simulator.utils.MathUtils;
 
 public class Game extends SimulatorObject implements GameInterface{

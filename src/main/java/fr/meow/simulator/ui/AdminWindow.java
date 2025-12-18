@@ -1,6 +1,6 @@
 package fr.meow.simulator.ui;
 
-import fr.meow.simulator.core.VideoGameSimulator;
+import fr.meow.simulator.core.Magasin;
 import fr.meow.simulator.core.entity.Player;
 import fr.meow.simulator.core.entity.client.Client;
 import fr.meow.simulator.core.entity.client.Colors;
@@ -58,7 +58,7 @@ public class AdminWindow {
         VBox header = new VBox(4, title, subtitle);
         root.setTop(header);
 
-        Player player = VideoGameSimulator.getInstance().getPlayer();
+        Player player = Magasin.getInstance().getPlayer();
 
         Button walletButton = new Button("Set Wallet To 99999999999");
         walletButton.setOnAction(e -> {
@@ -73,7 +73,7 @@ public class AdminWindow {
             Colors color = colorChoice.getSelectionModel().getSelectedItem();
             String name = "Client-" + UUID.randomUUID();
             Client client = new Client(color.name(), name);
-            VideoGameSimulator.getInstance().getClientManager().addClient(client);
+            Magasin.getInstance().getClientManager().addClient(client);
         });
 
         HBox spawnRow = new HBox(8, new Label("Color"), colorChoice, spawnButton);

@@ -2,7 +2,7 @@ package fr.meow.simulator.ui;
 
 import fr.meow.simulator.core.Clock;
 import fr.meow.simulator.core.NotificationListener;
-import fr.meow.simulator.core.VideoGameSimulator;
+import fr.meow.simulator.core.Magasin;
 import fr.meow.simulator.core.entity.Player;
 import fr.meow.simulator.core.entity.client.Client;
 import fr.meow.simulator.core.entity.client.ClientListener;
@@ -17,7 +17,6 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -56,7 +55,7 @@ public class GameWindow implements ClientListener, NotificationListener {
     private VBox notificationBox;
 
     private String walletText() {
-        return String.format("Wallet: $%.2f", VideoGameSimulator.getInstance().getPlayer().getWallet());
+        return String.format("Wallet: $%.2f", Magasin.getInstance().getPlayer().getWallet());
     }
 
     public GameWindow(Stage stage, MainWindow mainWindow) {
@@ -65,8 +64,8 @@ public class GameWindow implements ClientListener, NotificationListener {
         initPaths();
         initUI();
         initAnimation();
-        VideoGameSimulator.getInstance().getClientManager().addListener(this);
-        VideoGameSimulator.getInstance().setNotificationListener(this);
+        Magasin.getInstance().getClientManager().addListener(this);
+        Magasin.getInstance().setNotificationListener(this);
     }
 
     public void show() {
@@ -330,7 +329,7 @@ public class GameWindow implements ClientListener, NotificationListener {
     }
 
     private void openRefillMenu() {
-        Player player = VideoGameSimulator.getInstance().getPlayer();
+        Player player = Magasin.getInstance().getPlayer();
         RefillWindow refillWindow = new RefillWindow(stage, player, this);
         refillWindow.show();
     }

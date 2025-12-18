@@ -1,6 +1,5 @@
 package fr.meow.simulator.core;
 
-import fr.meow.simulator.core.entity.client.ClientManager;
 import java.util.Random;
 
 public class Clock {
@@ -43,7 +42,7 @@ public class Clock {
         if (hours >= 24) {
             hours = 9;
 
-            VideoGameSimulator.getInstance().getPlayer().newGameDay();
+            Magasin.getInstance().getPlayer().newGameDay();
         }
     }
 
@@ -57,7 +56,7 @@ public class Clock {
         double spawnProbabilityPerTick = hourlyRate / TICKS_PER_HOUR;
 
         if (RANDOM.nextDouble() < spawnProbabilityPerTick) {
-            VideoGameSimulator.getInstance().getClientManager().spawnClient();
+            Magasin.getInstance().getClientManager().spawnClient();
         }
     }
 

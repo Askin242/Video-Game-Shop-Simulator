@@ -1,6 +1,6 @@
 package fr.meow.simulator.ui;
 
-import fr.meow.simulator.core.VideoGameSimulator;
+import fr.meow.simulator.core.Magasin;
 import fr.meow.simulator.core.save.SaveManager;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -72,13 +72,13 @@ public class EscapeMenuWindow {
         SaveManager saveManager = new SaveManager();
         saveAndExit.setOnAction(e -> {
             td.showAndWait();
-            saveManager.saveGame(VideoGameSimulator.getInstance(), td.getEditor().getText(), gameWindow.getClientDataForSave());
+            saveManager.saveGame(Magasin.getInstance(), td.getEditor().getText(), gameWindow.getClientDataForSave());
             owner.close();
         });
 
         saveAndMenu.setOnAction(e -> {
             td.showAndWait();
-            saveManager.saveGame(VideoGameSimulator.getInstance(), td.getEditor().getText(), gameWindow.getClientDataForSave());
+            saveManager.saveGame(Magasin.getInstance(), td.getEditor().getText(), gameWindow.getClientDataForSave());
             stage.close();
             mainWindow.show();
         });

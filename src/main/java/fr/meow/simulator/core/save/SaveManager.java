@@ -1,6 +1,6 @@
 package fr.meow.simulator.core.save;
 
-import fr.meow.simulator.core.VideoGameSimulator;
+import fr.meow.simulator.core.Magasin;
 import fr.meow.simulator.core.entity.Player;
 import fr.meow.simulator.core.games.Game;
 import fr.meow.simulator.core.games.GameTier;
@@ -17,7 +17,7 @@ import java.util.List;
 public class SaveManager {
     private static final String SAVE_DIRECTORY = "saves";
 
-    public boolean saveGame(VideoGameSimulator simulator, String filename, List<ClientSaveData> clients) {
+    public boolean saveGame(Magasin simulator, String filename, List<ClientSaveData> clients) {
         try {
             Path saveDir = Paths.get(SAVE_DIRECTORY);
             if (!Files.exists(saveDir)) {
@@ -44,7 +44,7 @@ public class SaveManager {
         }
     }
 
-    public Save loadGame(VideoGameSimulator simulator, String filename) {
+    public Save loadGame(Magasin simulator, String filename) {
         try {
             if (!filename.endsWith(".dat")) {
                 filename += ".dat";
@@ -74,7 +74,7 @@ public class SaveManager {
         }
     }
 
-    private void restoreGameState(VideoGameSimulator simulator, Save save) {
+    private void restoreGameState(Magasin simulator, Save save) {
         Player player = simulator.getPlayer();
         GamesManager gamesManager = simulator.getGamesManager();
 

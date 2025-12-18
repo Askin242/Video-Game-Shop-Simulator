@@ -1,10 +1,9 @@
 package fr.meow.simulator.core.entity.client;
 
 import fr.meow.simulator.core.SimulatorObject;
-import fr.meow.simulator.core.VideoGameSimulator;
+import fr.meow.simulator.core.Magasin;
 import fr.meow.simulator.core.entity.Player;
 import fr.meow.simulator.core.games.Game;
-import fr.meow.simulator.core.games.GamesManager;
 import fr.meow.simulator.utils.MathUtils;
 
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ public class Client extends SimulatorObject {
     }
 
     private int getProductsAmounts() {
-        int unlockedGames = VideoGameSimulator.getInstance().getGamesManager().getUnlockedGames().size();
+        int unlockedGames = Magasin.getInstance().getGamesManager().getUnlockedGames().size();
 
         double growthRate = 0.035;
         double scale = 3.0;
@@ -48,7 +47,7 @@ public class Client extends SimulatorObject {
 
     private ArrayList<Game> getChosenProducts() {
         ArrayList<Game> res = new ArrayList<>();
-        ArrayList<Game> games = VideoGameSimulator.getInstance().getGamesManager().getUnlockedGames();
+        ArrayList<Game> games = Magasin.getInstance().getGamesManager().getUnlockedGames();
 
         if (games.isEmpty()) {
             return res;
@@ -63,20 +62,20 @@ public class Client extends SimulatorObject {
     }
 
     public void BuyGame() {
-        Player player = VideoGameSimulator.getInstance().getPlayer();
+        Player player = Magasin.getInstance().getPlayer();
         ArrayList<Game> selling = player.getSellingGames();
 
         for (Game desired : new ArrayList<>(lookingFor)) {
             if (!selling.contains(desired)) {
-                if (VideoGameSimulator.getInstance().getNotificationListener() != null) {
-                    VideoGameSimulator.getInstance().getNotificationListener().notify("No " + desired.getName() + " available.");
+                if (Magasin.getInstance().getNotificationListener() != null) {
+                    Magasin.getInstance().getNotificationListener().notify("No " + desired.getName() + " available.");
                 }
                 continue;
             }
 
             if (!canBuy(desired)) {
-                if (VideoGameSimulator.getInstance().getNotificationListener() != null) {
-                    VideoGameSimulator.getInstance().getNotificationListener().notify(desired.getName() + " too expensive.");
+                if (Magasin.getInstance().getNotificationListener() != null) {
+                    Magasin.getInstance().getNotificationListener().notify(desired.getName() + " too expensive.");
                 }
                 continue;
             }
@@ -91,8 +90,8 @@ public class Client extends SimulatorObject {
                 player.removeFromSelling(desired);
                 player.addToWallet(desired.getSellingPrice());
                 basket.add(desired);
-                if (VideoGameSimulator.getInstance().getNotificationListener() != null) {
-                    VideoGameSimulator.getInstance().getNotificationListener().notify(getName() + " bought " + desired.getName());
+                if (Magasin.getInstance().getNotificationListener() != null) {
+                    Magasin.getInstance().getNotificationListener().notify(getName() + " bought " + desired.getName());
                 }
             }
         }
@@ -102,47 +101,8 @@ public class Client extends SimulatorObject {
         return color;
     }
 
-    public ArrayList<Game> getLookingFor() {
-        return lookingFor;
-    }
-
-    public void addLookingFor(Game game) {
-        if (canBuy(game)) {
-            this.lookingFor.add(game);
-        }
-    }
-
-    public void removeLookingFor(Game game) {
-        this.lookingFor.remove(game);
-    }
-
-    public ArrayList<Game> getBasket() {
-        return basket;
-    }
-
-    public boolean addBasket(Game game) {
-        if (!canBuy(game)) {
-            return false;
-        }
-
-        this.basket.add(game);
-        return true;
-    }
-
-    public void removeBasket(Game game) {
-        this.basket.remove(game);
-    }
-
-    public int getyPos() {
-        return yPos;
-    }
-
     public void setyPos(int yPos) {
         this.yPos = yPos;
-    }
-
-    public int getxPos() {
-        return xPos;
     }
 
     public void setxPos(int xPos) {

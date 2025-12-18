@@ -1,6 +1,6 @@
 package fr.meow.simulator.ui;
 
-import fr.meow.simulator.core.VideoGameSimulator;
+import fr.meow.simulator.core.Magasin;
 import fr.meow.simulator.core.save.Save;
 import fr.meow.simulator.core.save.SaveManager;
 import javafx.collections.FXCollections;
@@ -12,7 +12,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -79,7 +78,7 @@ public class MainWindow {
     }
 
     private void startNewGame() {
-        VideoGameSimulator.reset();
+        Magasin.reset();
         openGameWindow();
     }
 
@@ -106,7 +105,7 @@ public class MainWindow {
             return;
         }
 
-        Save save = saveManager.loadGame(VideoGameSimulator.getInstance(), result.get());
+        Save save = saveManager.loadGame(Magasin.getInstance(), result.get());
         if (save == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Load Failed");

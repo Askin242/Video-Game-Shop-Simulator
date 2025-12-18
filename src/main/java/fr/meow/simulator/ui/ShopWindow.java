@@ -1,10 +1,9 @@
 package fr.meow.simulator.ui;
 
-import fr.meow.simulator.core.VideoGameSimulator;
+import fr.meow.simulator.core.Magasin;
 import fr.meow.simulator.core.games.Game;
 import fr.meow.simulator.core.games.GameTier;
 import fr.meow.simulator.core.games.GameType;
-import fr.meow.simulator.core.games.GamesManager;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -243,12 +242,12 @@ public class ShopWindow {
                 tierUnlockButtons.put(key, unlockBtn);
 
                 unlockBtn.setOnAction(e -> {
-                    if (VideoGameSimulator.getInstance().getPlayer().getWallet() < cost || isTierUnlocked(type, tier)) {
+                    if (Magasin.getInstance().getPlayer().getWallet() < cost || isTierUnlocked(type, tier)) {
                         return;
                     }
-                    VideoGameSimulator.getInstance().getPlayer().removeToWallet(cost);
+                    Magasin.getInstance().getPlayer().removeToWallet(cost);
                     walletLabel.setText(walletText());
-                    VideoGameSimulator.getInstance().getGamesManager().unlockGameTier(type, tier);
+                    Magasin.getInstance().getGamesManager().unlockGameTier(type, tier);
                     refreshGamesTable();
                     updateTotals();
                     updateTierButtonStates();
@@ -273,10 +272,10 @@ public class ShopWindow {
 
     private void buyCart() {
         double total = calculateTotal();
-        if (total <= 0 || VideoGameSimulator.getInstance().getPlayer().getWallet() < total) {
+        if (total <= 0 || Magasin.getInstance().getPlayer().getWallet() < total) {
             return;
         }
-        VideoGameSimulator.getInstance().getPlayer().removeToWallet(total);
+        Magasin.getInstance().getPlayer().removeToWallet(total);
         walletLabel.setText(walletText());
 
         quantities.entrySet().stream()
@@ -285,7 +284,7 @@ public class ShopWindow {
                     Game game = e.getKey();
                     int quantity = e.getValue();
                     for (int i = 0; i < quantity; i++) {
-                        VideoGameSimulator.getInstance().getPlayer().addToCurrentGames(game);
+                        Magasin.getInstance().getPlayer().addToCurrentGames(game);
                     }
                 });
 
@@ -313,7 +312,7 @@ public class ShopWindow {
         } else {
             cartBreakdownLabel.setText(breakdown);
         }
-        purchaseButton.setDisable(total <= 0 || VideoGameSimulator.getInstance().getPlayer().getWallet() < total);
+        purchaseButton.setDisable(total <= 0 || Magasin.getInstance().getPlayer().getWallet() < total);
     }
 
     private double calculateTotal() {
@@ -329,18 +328,18 @@ public class ShopWindow {
 
     private ObservableList<Game> unlockedGames() {
         return FXCollections.observableArrayList(
-                VideoGameSimulator.getInstance().getGamesManager().gameArrayList.stream()
+                Magasin.getInstance().getGamesManager().gameArrayList.stream()
                         .filter(Game::isUnlocked)
                         .collect(Collectors.toList())
         );
     }
 
     private String walletText() {
-        return String.format("Wallet: $%.2f", VideoGameSimulator.getInstance().getPlayer().getWallet());
+        return String.format("Wallet: $%.2f", Magasin.getInstance().getPlayer().getWallet());
     }
 
     private boolean isTierUnlocked(GameType type, GameTier tier) {
-        return VideoGameSimulator.getInstance().getGamesManager().getGamesByTypeAndTier(type, tier).stream()
+        return Magasin.getInstance().getGamesManager().getGamesByTypeAndTier(type, tier).stream()
                 .anyMatch(Game::isUnlocked);
     }
 
@@ -352,7 +351,7 @@ public class ShopWindow {
                 if (button != null) {
                     double cost = tierUnlockCost(type, tier);
                     boolean isUnlocked = isTierUnlocked(type, tier);
-                    boolean canAfford = VideoGameSimulator.getInstance().getPlayer().getWallet() >= cost;
+                    boolean canAfford = Magasin.getInstance().getPlayer().getWallet() >= cost;
                     button.setDisable(isUnlocked || !canAfford);
                 }
             }

@@ -4,15 +4,15 @@ import fr.meow.simulator.core.entity.Player;
 import fr.meow.simulator.core.entity.client.ClientManager;
 import fr.meow.simulator.core.games.GamesManager;
 
-public class VideoGameSimulator {
-    private static VideoGameSimulator simulator;
+public class Magasin {
+    private static Magasin simulator;
     private final Player player;
     private final GamesManager gamesManager;
     private final ClientManager clientManager;
     private final Clock clock;
     private NotificationListener notificationListener;
 
-    public VideoGameSimulator() {
+    public Magasin() {
         this.player = new Player(1000);
         this.gamesManager = new GamesManager();
         this.clientManager = new ClientManager();
@@ -40,14 +40,14 @@ public class VideoGameSimulator {
         return notificationListener;
     }
 
-    public static synchronized VideoGameSimulator getInstance() {
+    public static synchronized Magasin getInstance() {
         if (simulator == null) {
-            simulator = new VideoGameSimulator();
+            simulator = new Magasin();
         }
         return simulator;
     }
 
     public static synchronized void reset() {
-        simulator = new VideoGameSimulator();
+        simulator = new Magasin();
     }
 }
