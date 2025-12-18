@@ -73,7 +73,7 @@ public class AdminWindow {
             Colors color = colorChoice.getSelectionModel().getSelectedItem();
             String name = "Client-" + UUID.randomUUID();
             Client client = new Client(color.name(), name);
-            gameWindow.handleClientSpawn(client);
+            VideoGameSimulator.getInstance().getClientManager().addClient(client);
         });
 
         HBox spawnRow = new HBox(8, new Label("Color"), colorChoice, spawnButton);
@@ -108,4 +108,3 @@ public class AdminWindow {
         stage.setScene(scene);
     }
 }
-

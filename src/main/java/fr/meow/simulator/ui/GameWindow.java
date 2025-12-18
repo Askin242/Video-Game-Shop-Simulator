@@ -3,6 +3,7 @@ package fr.meow.simulator.ui;
 import fr.meow.simulator.core.VideoGameSimulator;
 import fr.meow.simulator.core.entity.Player;
 import fr.meow.simulator.core.entity.client.Client;
+import fr.meow.simulator.core.entity.client.ClientListener;
 import fr.meow.simulator.core.entity.client.ClientSprite;
 import fr.meow.simulator.core.entity.client.Colors;
 import fr.meow.simulator.core.save.ClientSaveData;
@@ -32,7 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GameWindow {
+public class GameWindow implements ClientListener {
 
     private final Stage stage;
     private final MainWindow mainWindow;
@@ -56,6 +57,7 @@ public class GameWindow {
         initPaths();
         initUI();
         initAnimation();
+        VideoGameSimulator.getInstance().getClientManager().addListener(this);
     }
 
     public void show() {
@@ -67,6 +69,11 @@ public class GameWindow {
 
     public void hide() {
         animationTimer.stop();
+    }
+
+    @Override
+    public void onClientAdded(Client client) {
+        handleClientSpawn(client);
     }
 
     public void handleClientSpawn(Client client) {
@@ -101,8 +108,7 @@ public class GameWindow {
         walletLabel.layoutXProperty().bind(
                 root.widthProperty()
                         .subtract(walletLabel.widthProperty())
-                        .subtract(20)
-        );
+                        .subtract(20));
         walletLabel.setLayoutY(15);
         root.getChildren().add(walletLabel);
 
@@ -251,7 +257,7 @@ public class GameWindow {
             sprite.moveTo(nx, ny);
         }
 
-        if(walletLabel != null) {
+        if (walletLabel != null) {
             walletLabel.setText(walletText());
         }
     }
@@ -295,8 +301,7 @@ public class GameWindow {
         }
         String fileName = color.name().toLowerCase() + ".png";
         Image image = new Image(
-                getClass().getResource("/images/sprite/" + fileName).toExternalForm()
-        );
+                getClass().getResource("/images/sprite/" + fileName).toExternalForm());
         clientImages.put(color, image);
         return image;
     }
@@ -316,8 +321,7 @@ public class GameWindow {
                     sprite.x,
                     sprite.y,
                     sprite.pathIndex,
-                    pathData
-            ));
+                    pathData));
         }
         return clientData;
     }
@@ -350,4 +354,3 @@ public class GameWindow {
         }
     }
 }
-

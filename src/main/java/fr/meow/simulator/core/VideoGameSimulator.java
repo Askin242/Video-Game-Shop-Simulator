@@ -1,16 +1,19 @@
 package fr.meow.simulator.core;
 
 import fr.meow.simulator.core.entity.Player;
+import fr.meow.simulator.core.entity.client.ClientManager;
 import fr.meow.simulator.core.games.GamesManager;
 
 public class VideoGameSimulator {
     private static VideoGameSimulator simulator;
     private final Player player;
     private final GamesManager gamesManager;
+    private final ClientManager clientManager;
 
     public VideoGameSimulator() {
         this.player = new Player(1000);
         this.gamesManager = new GamesManager();
+        this.clientManager = new ClientManager();
     }
 
     public Player getPlayer() {
@@ -19,6 +22,10 @@ public class VideoGameSimulator {
 
     public GamesManager getGamesManager() {
         return gamesManager;
+    }
+
+    public ClientManager getClientManager() {
+        return clientManager;
     }
 
     public static synchronized VideoGameSimulator getInstance() {
