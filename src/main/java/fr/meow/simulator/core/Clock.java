@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Clock {
 
-    private static int hours = 9;
+    private static int hours = 10;
     private static int minutes = 0;
     
     private static final int MINUTES_PER_TICK = 2;
@@ -40,7 +40,7 @@ public class Clock {
         }
 
         if (hours >= 24) {
-            hours = 9;
+            hours = 10;
 
             Magasin.getInstance().getPlayer().newGameDay();
         }
