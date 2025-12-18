@@ -42,19 +42,6 @@ public class Game extends SimulatorObject implements GameInterface{
         }
     }
 
-    public void ClockLoop() {
-        new Thread(() -> {
-            try {
-                while (true) {
-                    Clock.tick();
-                    Thread.sleep(1000);
-                }
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }).start();
-    }
-
     public double getMarketPrice() {
         return marketPrice;
     }

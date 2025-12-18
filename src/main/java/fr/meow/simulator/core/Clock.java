@@ -1,20 +1,31 @@
 package fr.meow.simulator.core;
 
 import fr.meow.simulator.core.entity.client.ClientManager;
+import java.util.Random;
 
 public class Clock {
 
-    private static int day;
-    private static int hours;
-    private static int minutes;
+    private static int day = 1;
+    private static int hours = 9;
+    private static int minutes = 0;
     
     private static final int MINUTES_PER_TICK = 2;
+    private static final double TICKS_PER_HOUR = 60.0 / MINUTES_PER_TICK;
+    private static final Random RANDOM = new Random();
 
-    public Clock(ClientManager clientManager) {
-        day = 0;
-        hours = 0;
-        minutes = 0;
-        Clock.clientManager = clientManager;
+    public Clock() {}
+
+    public void loop() {
+        new Thread(() -> {
+            try {
+                while (true) {
+                    Clock.tick();
+                    Thread.sleep(1000);
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }).start();
     }
 
     public static void tick() {
@@ -31,7 +42,7 @@ public class Clock {
         }
 
         if (hours >= 24) {
-            hours = 0;
+            hours = 9;
             day++;
 
             VideoGameSimulator.getInstance().getPlayer().newGameDay();
@@ -39,28 +50,34 @@ public class Clock {
     }
 
     private static void handleClientSpawning() {
-        int amount = getSpawnAmountForHour(hours);
+        double hourlyRate = getRandomizedSpawnRateForHour(hours);
 
-        if (amount > 0) {
-            clientManager.spawnClient();
+        if (hourlyRate <= 0) {
+            return;
+        }
+
+        double spawnProbabilityPerTick = hourlyRate / TICKS_PER_HOUR;
+
+        if (RANDOM.nextDouble() < spawnProbabilityPerTick) {
+            VideoGameSimulator.getInstance().getClientManager().spawnClient();
         }
     }
 
-    private static int getSpawnAmountForHour(int hour) {
+    private static double getRandomizedSpawnRateForHour(int hour) {
+        double base;
 
         if (hour >= 10 && hour < 12) {
-            return 2;
+            base = 2.0;
+        } else if (hour >= 13 && hour < 17) {
+            base = 4.0;
+        } else if (hour >= 18 && hour < 22) {
+            base = 1.0;
+        } else {
+            return 0.0;
         }
 
-        if (hour >= 13 && hour < 17) {
-            return 4;
-        }
-
-        if (hour >= 18 && hour < 22) {
-            return 1;
-        }
-
-        return 0;
+        double variation = 0.75 + (RANDOM.nextDouble() * 0.5);
+        return base * variation;
     }
 
     public int getDay() {

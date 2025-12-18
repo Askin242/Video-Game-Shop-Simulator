@@ -76,6 +76,14 @@ public class GameWindow implements ClientListener {
         handleClientSpawn(client);
     }
 
+    @Override
+    public void onClientRemoved(Client client) {
+        ClientSprite sprite = clientSprites.remove(client);
+        if (sprite != null && clientLayer != null) {
+            clientLayer.getChildren().remove(sprite.view);
+        }
+    }
+
     public void handleClientSpawn(Client client) {
         if (clientSprites.containsKey(client)) {
             return;

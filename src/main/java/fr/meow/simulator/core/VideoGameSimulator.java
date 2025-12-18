@@ -9,12 +9,14 @@ public class VideoGameSimulator {
     private final Player player;
     private final GamesManager gamesManager;
     private final ClientManager clientManager;
+    private final Clock clock;
 
     public VideoGameSimulator() {
         this.player = new Player(1000);
         this.gamesManager = new GamesManager();
         this.clientManager = new ClientManager();
-        Clock.tick();
+        this.clock = new Clock();
+        this.clock.loop();
     }
 
     public Player getPlayer() {

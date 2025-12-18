@@ -4,6 +4,7 @@ import fr.meow.simulator.core.SimulatorObject;
 import fr.meow.simulator.core.VideoGameSimulator;
 import fr.meow.simulator.core.entity.Player;
 import fr.meow.simulator.core.games.Game;
+import fr.meow.simulator.core.games.GameType;
 import fr.meow.simulator.core.games.GamesManager;
 import fr.meow.simulator.utils.MathUtils;
 
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 
 public class Client extends SimulatorObject {
 
-    private static final double MAX_PRICE_MULTIPLIER = 1.125;
+    private static final double MAX_PRICE_MULTIPLIER = 1.4;
 
     private final String color;
     private final ArrayList<Game> basket;
@@ -48,37 +49,48 @@ public class Client extends SimulatorObject {
 
     private ArrayList<Game> getChosenProducts() {
         ArrayList<Game> res = new ArrayList<>();
-        ArrayList<Game> games = null;
-        try {
-            games = VideoGameSimulator.getInstance().getGamesManager().getUnlockedGames();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        ArrayList<Game> games = VideoGameSimulator.getInstance().getGamesManager().getUnlockedGames();
+
+        if (games.isEmpty()) {
+            return res;
         }
 
-        int wantedAmount = getProductsAmounts();
-        int attempts = 0;
-
-        while (res.size() < wantedAmount && attempts < 50) {
-            Game chosenGame = games.get(MathUtils.randomInt(0, games.size()));
-
-            if (canBuy(chosenGame)) {
-                res.add(chosenGame);
-            }
-
-            attempts++;
+        while (res.size() < getProductsAmounts()) {
+            Game chosenGame = games.get(MathUtils.randomInt(0, games.size()-1));
+            res.add(chosenGame);
         }
 
         return res;
     }
 
     public void BuyGame() {
-        ArrayList<Game> selling = VideoGameSimulator.getInstance().getPlayer().getSellingGames();
+        Player player = VideoGameSimulator.getInstance().getPlayer();
+        ArrayList<Game> selling = player.getSellingGames();
 
-        for (int i = 0; i < this.lookingFor.size(); i++) {
-            if (selling.contains(basket.get(i))) {
-                IO.println("can buy");
-            } else {
-                IO.println("can't buy");
+        for (Game desired : new ArrayList<>(lookingFor)) {
+            GameType type = desired.getGameType();
+
+            if (!selling.contains(desired)) {
+                System.out.println("No " + desired.getName() + " available.");
+                continue;
+            }
+
+            if (!canBuy(desired)) {
+                System.out.println(desired.getName() + " too expensive.");
+                continue;
+            }
+
+            try {
+                Thread.sleep(MathUtils.randomInt(500, 1500));
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
+            if (selling.contains(desired)) {
+                player.removeFromSelling(desired);
+                player.addToWallet(desired.getSellingPrice());
+                basket.add(desired);
+                System.out.println(getName() + " bought " + desired.getName());
             }
         }
     }
